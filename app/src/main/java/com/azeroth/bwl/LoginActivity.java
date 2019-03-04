@@ -40,7 +40,6 @@ public class LoginActivity extends BwActivity {
         message.parameter=userInfo;
         this.sendHttpRequestByPOST(message,x->{
             RT<UserInfo> rt= com.alibaba.fastjson.JSON.parseObject(x,new TypeReference<RT<UserInfo>>() {});
-
             Toast.makeText(this,rt.data.NickName,Toast.LENGTH_LONG).show();
         });
     }

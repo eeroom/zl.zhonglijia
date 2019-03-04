@@ -6,20 +6,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".LoginActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="登陆"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:background="@color/colorPrimary"
+         />
 <EditText
     android:id="@+id/loginTxtName"
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:inputType="number"
-    android:hint="用户名"
+    android:hint="请输入手机号码"
     />
     <EditText
         android:id="@+id/loginTxtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="密码"
+        android:hint="请输入密码"
         />
     <Button
         android:id="@+id/loginBtnOk"
