@@ -12,11 +12,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.azeroth.model.UserInfo;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.ksoap2.serialization.SoapObject;
 
-import java.io.BufferedReader;
 import java.util.List;
 
 
@@ -59,7 +56,7 @@ public class LoginActivity extends BwActivity {
             SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERPWebService.Action.USERLOGIN + "Result");
             String json = provinceSoapObject.getProperty(0).toString();
             String json2 = provinceSoapObject.getProperty(1).toString();
-            JSONArray obj_json1 = new JSONArray(json);
+            org.json.JSONArray obj_json1 = new org.json.JSONArray(json);
             String str = obj_json1.getJSONObject(0).getString("result");
             if(!str.equals(API.Code.Ok))
                 throw new RuntimeException(json2);
