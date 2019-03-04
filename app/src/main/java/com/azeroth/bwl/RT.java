@@ -1,11 +1,21 @@
 package com.azeroth.bwl;
 
 
-public class RT {
+public class RT<T>
+{
+    public int code;
+    public String msg;
+    public T data;
+    public Object extension;
 
-    public Integer UR_USER_ID;
+    public enum RTCode
+    {
+        Ok,
+        Error,
+        NoAuthentication,
+        NoAuthorization,
+    }
 
-    public String TR_UNION_ID;
-
-    public String TR_NAME;
 }
+
+

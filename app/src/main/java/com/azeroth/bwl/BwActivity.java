@@ -58,9 +58,9 @@ public class BwActivity extends Activity
         };
     }
 
-    public void SendHttpRequestByGET(HttpRequestMessage message, FunctionWrapper<String> fn)throws  Exception{
+    void SendHttpRequestByGET(HttpRequestMessage message, FunctionWrapper<String> fn)throws  Exception{
         new Thread(this.wrapperRunnable(()->{
-            URL url=new URL(message.getUrl());
+            URL url=new URL(message.url);
             java.net.HttpURLConnection connection= (java.net.HttpURLConnection)url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
@@ -75,9 +75,9 @@ public class BwActivity extends Activity
         })).start();
     }
 
-    public void SendHttpRequestByPOST(HttpRequestMessage message, FunctionWrapper<String> fn)throws  Exception {
+    void SendHttpRequestByPOST2(HttpRequestMessage message, FunctionWrapper<String> fn)throws  Exception {
         new Thread(this.wrapperRunnable(()->{
-            URL url=new URL(message.getUrl());
+            URL url=new URL(message.url);
             java.net.HttpURLConnection connection= (java.net.HttpURLConnection)url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
@@ -89,6 +89,38 @@ public class BwActivity extends Activity
                 sb.append(line);
             }
             this.handler.post(this.wrapperRunnable(()->fn.invoke(sb.toString())));
+        })).start();
+    }
+
+    public void sendHttpRequestByPOST(HttpRequestMessage message,FunctionWrapper<String> fn) throws  Exception {
+        new Thread(this.wrapperRunnable(()->{
+            URL url=new URL(message.url);
+            java.net.HttpURLConnection connection= (java.net.HttpURLConnection)url.openConnection();
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setRequestMethod("POST");
+            connection.setUseCaches(false);
+            connection.setInstanceFollowRedirects(true);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.connect();
+            // POST请求
+            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+            String json = com.alibaba.fastjson.JSONObject.toJSONString(message.parameter);
+            out.writeBytes(json);
+            out.flush();
+            out.close();
+            // 读取响应
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String lineTxt;
+            StringBuffer sb = new StringBuffer();
+            while ((lineTxt = reader.readLine()) != null) {
+                sb.append(lineTxt);
+            }
+            String rt=sb.toString();
+            reader.close();
+            // 断开连接
+            connection.disconnect();
+            this.handler.post(this.wrapperRunnable(()->fn.invoke(rt)));
         })).start();
     }
 
@@ -97,7 +129,7 @@ public class BwActivity extends Activity
             // 创建SoapObject对象
             SoapObject requestParameter = new SoapObject(message.namesp, message.action);
             // SoapObject添加参数
-            HashMap<String,String> parameter=message.getParameter();
+            HashMap<String,String> parameter=message.parameter;
             for (Iterator<Map.Entry<String, String>> it = parameter.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<String, String> entry = it.next();
                 requestParameter.addProperty(entry.getKey(), entry.getValue());
@@ -107,7 +139,7 @@ public class BwActivity extends Activity
             // 设置是否调用的是.Net开发的WebService
             soapEnvelope.setOutputSoapObject(requestParameter);
             soapEnvelope.dotNet = true;
-            HttpTransportSE httpTransportSE = new HttpTransportSE(message.getUrl(), message.requestTimeout);
+            HttpTransportSE httpTransportSE = new HttpTransportSE(message.url, message.requestTimeout);
             httpTransportSE.debug = true;
             httpTransportSE.call(message.namesp + message.action, soapEnvelope);
             soapEnvelope.getResponse();
