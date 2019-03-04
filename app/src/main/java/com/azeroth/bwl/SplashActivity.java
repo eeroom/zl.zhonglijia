@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
@@ -18,11 +19,17 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         LinearLayout layout= (LinearLayout)this.findViewById(R.id.layoutSplash);
-        RotateAnimation ra=new RotateAnimation(0f,360f,Animation.RELATIVE_TO_SELF,
-                0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        ra.setDuration(500);
-        layout.setAnimation(ra);
-        ra.setAnimationListener(this);
+        AlphaAnimation alAnimation=new AlphaAnimation(0,255);
+        alAnimation.setDuration(500);
+        alAnimation.setAnimationListener(this);
+        layout.setAnimation(alAnimation);
+
+//        RotateAnimation ra=new RotateAnimation(0f,360f,Animation.RELATIVE_TO_SELF,
+//                0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+//        ra.setDuration(1000);
+//        ra.setAnimationListener(this);
+//        layout.setAnimation(ra);
+
     }
     @Override
    public   void onAnimationStart(Animation animation){

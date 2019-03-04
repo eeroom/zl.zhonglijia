@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.azeroth.utility.FunctionWrapper;
+import com.azeroth.utility.RunnableWithException;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
@@ -23,9 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
-
-import static android.provider.ContactsContract.CommonDataKinds.Identity.NAMESPACE;
-
+import com.azeroth.utility.*;
 public class BwActivity extends Activity
 {
     Handler handler=new Handler();
@@ -39,7 +40,7 @@ public class BwActivity extends Activity
               if(msg==null ||msg.isEmpty())
                   msg=ex.getClass().getName();
               final  String msgtmp=msg;
-              this.handler.post(()->Toast.makeText(this,msgtmp,Toast.LENGTH_LONG).show());
+              this.handler.post(()->Toast.makeText(this,msgtmp,Toast.LENGTH_SHORT).show());
           }
         };
     }
@@ -53,7 +54,7 @@ public class BwActivity extends Activity
                 if(msg==null ||msg.isEmpty())
                     msg=ex.getClass().getName();
                 final  String msgtmp=msg;
-                this.handler.post(()->Toast.makeText(this,msgtmp,Toast.LENGTH_LONG).show());
+                this.handler.post(()->Toast.makeText(this,msgtmp,Toast.LENGTH_SHORT).show());
             }
         };
     }
@@ -105,7 +106,7 @@ public class BwActivity extends Activity
             connection.connect();
             // POST请求
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-            String json = com.alibaba.fastjson.JSONObject.toJSONString(message.parameter);
+            String json = com.alibaba.fastjson.JSON.toJSONString(message.parameter);
             out.writeBytes(json);
             out.flush();
             out.close();

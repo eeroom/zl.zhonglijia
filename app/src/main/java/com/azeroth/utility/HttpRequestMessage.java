@@ -1,15 +1,11 @@
-package com.azeroth.bwl;
-
-import java.security.PublicKey;
-import java.util.HashMap;
-import java.util.Map;
+package com.azeroth.utility;
 
 public class HttpRequestMessage
 {
-    String url;
-    Object parameter;
-    String responseCharsetName="UTF-8";
-    Integer requestTimeout=3000;
+  public String url;
+  public Object parameter;
+  public String responseCharsetName="UTF-8";
+  public Integer requestTimeout=3000;
 
     public HttpRequestMessage(String url){
         this.url=url;

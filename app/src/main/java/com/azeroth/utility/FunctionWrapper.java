@@ -1,6 +1,4 @@
-package com.azeroth.bwl;
-
-import android.view.View;
+package com.azeroth.utility;
 
 @FunctionalInterface
 public interface FunctionWrapper<T> {

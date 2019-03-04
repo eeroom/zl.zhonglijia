@@ -1,4 +1,4 @@
-package com.azeroth.bwl;
+package com.azeroth.utility;
 
 public interface RunnableWithException {
     public void Run() throws  Exception;
