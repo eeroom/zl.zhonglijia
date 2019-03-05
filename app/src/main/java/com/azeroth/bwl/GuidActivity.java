@@ -1,6 +1,8 @@
 package com.azeroth.bwl;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.azeroth.model.SpBucket;
+import com.azeroth.utility.FunctionWrapper;
+import com.azeroth.utility.HttpRequestMessage;
 
 import java.util.ArrayList;
 
@@ -22,6 +28,17 @@ public class GuidActivity extends BwActivity implements ViewPager.OnPageChangeLi
         ViewPager vpview= (ViewPager)this.findViewById(R.id.guidVpview);
         vpview.setAdapter(new GuidAdapter(this));
         vpview.addOnPageChangeListener(this);
+        this.findViewById(R.id.guidBtnOk).setOnClickListener(this.wrapperOnclickListener(x->this.guidBtnOkOnClick(x)));
+    }
+
+    public void guidBtnOkOnClick(View view){
+        SharedPreferences sp= this.getSharedPreferences(SpBucket.Index.Global,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor= sp.edit();
+        editor.putBoolean(SpBucket.Item.Guided,true);
+        Intent it=new Intent();
+        it.setClass(this,LoginActivity.class);
+        this.startActivity(it);
+        this.finish();
     }
 
     @Override
@@ -36,7 +53,7 @@ public class GuidActivity extends BwActivity implements ViewPager.OnPageChangeLi
 
     @Override
     public void onPageSelected(int position) {
-
+        this.findViewById(R.id.guidBtnOk).setVisibility(position==2?View.VISIBLE:View.GONE);
     }
 
     @Override

@@ -12,6 +12,8 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.LinearLayout;
 
+import com.azeroth.model.SpBucket;
+
 public class SplashActivity extends BwActivity implements Animation.AnimationListener {
 
     @Override
@@ -38,9 +40,11 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
 
     @Override
     public  void onAnimationEnd(Animation animation){
-
         Intent it=new Intent();
-        it.setClass(this,GuidActivity.class);
+        SharedPreferences sp= this.getSharedPreferences(SpBucket.Index.Global,Context.MODE_PRIVATE);
+        boolean guided= sp.getBoolean(SpBucket.Item.Guided,false);
+        Class<?> cl=guided?GuidActivity.class:GuidActivity.class;
+        it.setClass(this,cl);
         this.startActivity(it);
         this.finish();
     }
