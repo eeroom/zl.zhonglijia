@@ -40,7 +40,7 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
     public  void onAnimationEnd(Animation animation){
 
         Intent it=new Intent();
-        it.setClass(this,LoginActivity.class);
+        it.setClass(this,GuidActivity.class);
         this.startActivity(it);
         this.finish();
     }
