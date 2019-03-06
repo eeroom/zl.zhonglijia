@@ -15,10 +15,4 @@ public class SoapRequestMessage {
     public SoapRequestMessage(String url){
         this.url=url;
     }
-
-    public SoapRequestMessage(String url, HashMap<String, String> parameter){
-        this(url);
-        this.parameter=parameter;
-
-    }
 }

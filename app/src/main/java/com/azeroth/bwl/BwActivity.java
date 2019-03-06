@@ -61,7 +61,7 @@ public class BwActivity extends Activity
         };
     }
 
-    void SendHttpRequestByGET(HttpRequestMessage message, FunctionWrapper<String> fn)throws  Exception{
+   public void SendHttpRequestByGET(HttpRequestMessage message, FunctionWrapper<String> fn)throws  Exception{
         new Thread(this.wrapperRunnable(()->{
             URL url=new URL(message.url);
             java.net.HttpURLConnection connection= (java.net.HttpURLConnection)url.openConnection();
@@ -78,7 +78,7 @@ public class BwActivity extends Activity
         })).start();
     }
 
-    void SendHttpRequestByPOST2(HttpRequestMessage message, FunctionWrapper<String> fn)throws  Exception {
+   public void SendHttpRequestByPOST2(HttpRequestMessage message, FunctionWrapper<String> fn)throws  Exception {
         new Thread(this.wrapperRunnable(()->{
             URL url=new URL(message.url);
             java.net.HttpURLConnection connection= (java.net.HttpURLConnection)url.openConnection();

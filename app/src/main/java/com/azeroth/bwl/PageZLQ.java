@@ -5,7 +5,7 @@ import android.view.View;
 
 public class PageZLQ extends Page {
 
-    public PageZLQ(Activity activity){
+    public PageZLQ(BwActivity activity){
         super(activity);
     }
 

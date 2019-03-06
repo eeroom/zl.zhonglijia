@@ -5,11 +5,11 @@ import android.view.View;
 
 public abstract class Page {
 
-    public  Activity root;
+    public  BwActivity root;
 
     public View view;
 
-    public Page(Activity activity){
+    public Page(BwActivity activity){
         this.root=activity;
         this.view=this.createView();
     }

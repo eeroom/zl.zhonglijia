@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 public class PageHome extends Page {
-    public PageHome(Activity activity){
+    public PageHome(BwActivity activity){
         super(activity);
     }
     @Override

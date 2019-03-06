@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 public class PageTrip extends Page {
-    public PageTrip(Activity activity){
+    public PageTrip(BwActivity activity){
         super(activity);
     }
     @Override

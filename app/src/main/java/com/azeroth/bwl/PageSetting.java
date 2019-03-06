@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 public class PageSetting extends Page {
-    public PageSetting(Activity activity){
+    public PageSetting(BwActivity activity){
         super(activity);
     }
     @Override
