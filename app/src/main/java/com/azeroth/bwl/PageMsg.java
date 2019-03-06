@@ -111,6 +111,7 @@ public class PageMsg extends Page {
                 Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
                 this.mContext.handler.post(this.mContext.wrapperRunnable(()->{holder.ivTag.setImageBitmap(pngBM);}));
             })).start();
+            int a=3;
             //holder.ivTag.setImageURI(Uri.parse(templist.get(position).getIconUrl()));
             //loadImage(mContext,templist.get(position).getIconUrl(),holder.ivTag);
 //        switch (templist.get(position).getID()) {
