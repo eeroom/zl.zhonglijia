@@ -41,27 +41,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#f00"
-                android:src="@drawable/gui_pointer" />
+                android:src="@drawable/guid_pointer" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="#f00"
-                android:src="@drawable/gui_pointer" />
+                android:src="@drawable/guid_pointer" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="#f00"
-                android:src="@drawable/gui_pointer" />
+                android:src="@drawable/guid_pointer" />
         </LinearLayout>
         <ImageView
             android:id="@+id/guidImgRedPoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/gui_pointer"
+            android:src="@drawable/guid_pointer"
             android:background="#00f"/>
     </RelativeLayout>
 

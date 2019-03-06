@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".GuidActivity" />
     </application>
 

@@ -4,18 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.azeroth.model.SpBucket;
 import com.azeroth.model.UserInfo;
 
 import org.ksoap2.serialization.SoapObject;
-
-import java.util.List;
 
 import com.azeroth.utility.*;
 
@@ -81,7 +77,7 @@ public class LoginActivity extends BwActivity {
 
     private void redirectToHome(String userInfo) {
         Intent it = new Intent();
-        it.setClass(this, HomeActivity.class);
+        it.setClass(this, MainActivity.class);
         it.putExtra(SpBucket.Item.UserInfo, com.alibaba.fastjson.JSON.toJSONString(userInfo));
         this.startActivity(it);
         this.finish();

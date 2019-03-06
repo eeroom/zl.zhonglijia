@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入手机号码"
+            android:text="111"
             android:inputType="number" />
     </RelativeLayout>
     <RelativeLayout
@@ -56,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/loginImgPassword"
             android:inputType="textPassword"
+            android:text="111"
             android:hint="请输入密码"
 
             />
