@@ -31,19 +31,21 @@ import java.util.List;
 public class PageMsg extends Page {
 
     public PageMsg(BwActivity activity){
-        super(activity);
+        super(activity,View.inflate(activity,R.layout.page_msg,null));
     }
+
     @Override
-    public View createView() {
-        View v=View.inflate(this.root,R.layout.page_msg,null);
+    public void initView() throws  Exception {
+
+    }
+
+    @Override
+    public void initData() throws  Exception{
         SoapRequestMessage message=new SoapRequestMessage(API.ERP.BassAdrees);
         message.parameter.put("UnionID", "159");
         message.parameter.put("AppType", "2");
         message.action=API.ERP.Action.JPushGetJMessageTypeV2;
-        this.root.wrapperRunnable(()->{
-            this.root.SendSoapRequest(message,a->initListView(a));
-        }).run();
-        return v;
+        this.hostActivity.SendSoapRequest(message,a->initListView(a));
     }
 
     public void initListView(SoapObject result){
@@ -53,107 +55,53 @@ public class PageMsg extends Page {
         ArrayList<JpushNoticeTypeBean> lstNotice=
                 com.alibaba.fastjson.JSON.parseObject(json2,new TypeReference<ArrayList<JpushNoticeTypeBean>>() {});
         ListView lstView= (ListView)this.view.findViewById(R.id.lv_type);
-        lstView.setAdapter(new MsgAdapter(this.root,lstNotice));
+        lstView.setAdapter(new MsgAdapter(this.hostActivity,lstNotice));
     }
 
-    public static void loadImage(Context context, String imgUrl, ImageView imageView) {
-////        Glide.with(mContext)
-//        Glide.with(ECApplication.getInstance().getmContext())
-//                .load(imgUrl)
-//                .error(IMAGE)//加载出错时显示的图片
-////                .centerCrop()
-////                .fitCenter()
-////                .dontAnimate()//取消图片加载出来时淡入淡出的特效
-////                .skipMemoryCache(true)//跳过缓存到内存中去
-////                .diskCacheStrategy( DiskCacheStrategy.NONE )//跳过磁盘缓存
-//                .into(imageView);
-    }
+
+
     public class MsgAdapter extends BaseAdapter {
-        private BwActivity mContext;
-        private List<JpushNoticeTypeBean> templist;
-        public MsgAdapter(BwActivity mContext, List<JpushNoticeTypeBean> templist) {
-            this.mContext=mContext;
-            this.templist=templist;
+        private BwActivity context;
+        private List<JpushNoticeTypeBean> lstNotice;
+
+        public MsgAdapter(BwActivity context, List<JpushNoticeTypeBean> lstNotice) {
+
+            this.context=context;
+            this.lstNotice=lstNotice;
         }
 
         @Override
         public int getCount() {
-            return templist.size();
+            return lstNotice.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
+             return lstNotice.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return this.lstNotice.get(position).hashCode();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.page_msg_item, null);
-                convertView.setTag(new ViewHolder(convertView));
-            }
-            initializeViews(position, (ViewHolder) convertView.getTag());
-            return convertView;
-        }
-
-        private void initializeViews(int position, ViewHolder holder) {
-            holder.tvAllNum.setText("全部："+(Integer.valueOf(templist.get(position).getIsReadNum())+Integer.valueOf(templist.get(position).getNoReadNum())));
-            holder.tvRead.setText("已读："+Integer.valueOf(templist.get(position).getIsReadNum()));
-            holder.tvUnread.setText("未读："+Integer.valueOf(templist.get(position).getNoReadNum()));
-            holder.tvTypeName.setText(templist.get(position).getName());
-            new Thread(this.mContext.wrapperRunnable(()->{
-                URL picUrl = new URL(templist.get(position).getIconUrl());
+            if(convertView!=null)
+                return convertView;
+            convertView = View.inflate(this.context,R.layout.page_msg_item,null);
+            JpushNoticeTypeBean notice=this.lstNotice.get(position);
+            ((TextView) convertView.findViewById(R.id.tv_type_name)).setText(notice.getName());
+            ((TextView) convertView.findViewById(R.id.tv_all_num)).setText("全部："+(Integer.valueOf(notice.getIsReadNum())+Integer.valueOf(notice.getNoReadNum())));
+            ((TextView) convertView.findViewById(R.id.tv_unread)).setText("未读："+Integer.valueOf(notice.getNoReadNum()));
+            ((TextView) convertView.findViewById(R.id.tv_read)).setText("已读："+Integer.valueOf(notice.getIsReadNum()));
+            ImageView imgView=(ImageView) convertView.findViewById(R.id.iv_tag);
+            new Thread(this.context.wrapperRunnable(()->{
+                URL picUrl = new URL(notice.getIconUrl());
                 Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-                this.mContext.handler.post(this.mContext.wrapperRunnable(()->{holder.ivTag.setImageBitmap(pngBM);}));
+                this.context.handler.post(this.context.wrapperRunnable(()->imgView.setImageBitmap(pngBM)));
             })).start();
-            int a=3;
-            //holder.ivTag.setImageURI(Uri.parse(templist.get(position).getIconUrl()));
-            //loadImage(mContext,templist.get(position).getIconUrl(),holder.ivTag);
-//        switch (templist.get(position).getID()) {
-//            case "1":
-//                holder.ivTag.setImageResource(R.mipmap.kaoqin_tag);
-//                break;
-//            case "2":
-//                holder.ivTag.setImageResource(R.mipmap.renwu);
-//                break;
-//            case "3":
-//                holder.ivTag.setImageResource(R.mipmap.xitong);
-//                break;
-//            case "4":
-//                holder.ivTag.setImageResource(R.mipmap.xitong);
-//                break;
-//            case "8":
-//                holder.ivTag.setImageResource(R.mipmap.good_news);
-//                break;
-//            case "7":
-//                holder.ivTag.setImageResource(R.mipmap.yewu);
-//                break;
-//            default:
-//                holder.ivTag.setImageResource(R.mipmap.moren);
-//                break;
-//        }
-
-        }
-
-        protected class ViewHolder {
-            private ImageView ivTag;
-            private TextView tvTypeName;
-            private TextView tvAllNum;
-            private TextView tvUnread;
-            private TextView tvRead;
-
-            public ViewHolder(View view) {
-                ivTag = (ImageView) view.findViewById(R.id.iv_tag);
-                tvTypeName = (TextView) view.findViewById(R.id.tv_type_name);
-                tvAllNum = (TextView) view.findViewById(R.id.tv_all_num);
-                tvUnread = (TextView) view.findViewById(R.id.tv_unread);
-                tvRead = (TextView) view.findViewById(R.id.tv_read);
-            }
+            return convertView;
         }
     }
 }

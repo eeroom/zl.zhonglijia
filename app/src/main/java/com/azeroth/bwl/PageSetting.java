@@ -5,10 +5,16 @@ import android.view.View;
 
 public class PageSetting extends Page {
     public PageSetting(BwActivity activity){
-        super(activity);
+        super(activity,View.inflate(activity,R.layout.page_setting,null));
     }
+
     @Override
-    public View createView() {
-        return View.inflate(this.root,R.layout.page_setting,null);
+    public void initData() throws Exception {
+
+    }
+
+    @Override
+    public void initView() throws Exception {
+
     }
 }

@@ -5,10 +5,16 @@ import android.view.View;
 
 public class PageTrip extends Page {
     public PageTrip(BwActivity activity){
-        super(activity);
+        super(activity,View.inflate(activity,R.layout.page_trip,null));
     }
+
     @Override
-    public View createView() {
-        return View.inflate(this.root,R.layout.page_trip,null);
+    public void initData() throws Exception {
+
+    }
+
+    @Override
+    public void initView() throws Exception {
+
     }
 }

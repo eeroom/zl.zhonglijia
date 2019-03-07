@@ -32,24 +32,26 @@ public class LoginActivity extends BwActivity {
     }
 
     private void loginBtnOkOnClick(View view) throws Exception {
-        HttpRequestMessage message = new HttpRequestMessage("http://192.168.23.231:3161/Home/Login");
-        UserInfo userInfo = new UserInfo();
-        userInfo.CellPhoneNumber = ((TextView) this.findViewById(R.id.loginTxtName)).getText().toString();
-        userInfo.Pwd = ((TextView) this.findViewById(R.id.loginTxtPassword)).getText().toString();
-        if (userInfo.CellPhoneNumber.isEmpty())
-            throw new RuntimeException("手机号码不能为空");
-        if (userInfo.Pwd.isEmpty())
-            throw new RuntimeException("密码不能为空");
-        message.parameter = userInfo;
-        this.sendHttpRequestByPOST(message, x -> {
-            RT<UserInfo> rt = com.alibaba.fastjson.JSON.parseObject(x, new TypeReference<RT<UserInfo>>() {
-            });
-            if (rt.codej != RT.RTCode.Ok) {
-                Toast.makeText(this, rt.msg, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            this.redirectToHome(x);
-        });
+        this.redirectToHome("111");
+        return;
+//        HttpRequestMessage message = new HttpRequestMessage("http://192.168.23.231:3161/Home/Login");
+//        UserInfo userInfo = new UserInfo();
+//        userInfo.CellPhoneNumber = ((TextView) this.findViewById(R.id.loginTxtName)).getText().toString();
+//        userInfo.Pwd = ((TextView) this.findViewById(R.id.loginTxtPassword)).getText().toString();
+//        if (userInfo.CellPhoneNumber.isEmpty())
+//            throw new RuntimeException("手机号码不能为空");
+//        if (userInfo.Pwd.isEmpty())
+//            throw new RuntimeException("密码不能为空");
+//        message.parameter = userInfo;
+//        this.sendHttpRequestByPOST(message, x -> {
+//            RT<UserInfo> rt = com.alibaba.fastjson.JSON.parseObject(x, new TypeReference<RT<UserInfo>>() {
+//            });
+//            if (rt.codej != RT.RTCode.Ok) {
+//                Toast.makeText(this, rt.msg, Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            this.redirectToHome(x);
+//        });
     }
 
     private void loginBtnOkOnClick2(View view) throws Exception {
