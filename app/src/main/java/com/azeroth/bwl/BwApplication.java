@@ -14,7 +14,8 @@ public class BwApplication extends Application {
         super.onCreate();
         appInstance=this;
         this.userInfo=new UserInfo();
-        this.userInfo.Id="79";
+        this.userInfo.Id="169";
+        this.userInfo.Tid="test-c3ec8232-0269-4970-ae4a";
         this.userInfo.NickName="何涛";
     }
 }

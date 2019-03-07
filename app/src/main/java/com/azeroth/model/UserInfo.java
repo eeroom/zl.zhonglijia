@@ -25,4 +25,6 @@ public String ImgUrl;
         ///密码
         /// </summary>
 public String Pwd;
+
+public String Tid;
         }

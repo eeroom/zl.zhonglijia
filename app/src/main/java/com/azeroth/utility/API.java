@@ -7,4 +7,11 @@ public class API {
             public static String JPushGetJMessageTypeV2="JPushGetJMessageTypeV2";
         }
     }
+
+    public static class ERPTask{
+        public static String BassAdress="https://erp.zhongliko.com/Task/TaskService.asmx";
+        public static  class  Action{
+            public static  String getMyTaskListForApp="getMyTaskListForApp";
+        }
+    }
 }
