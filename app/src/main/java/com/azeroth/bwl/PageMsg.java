@@ -45,7 +45,7 @@ public class PageMsg extends Page {
         message.parameter.put("UnionID", "159");
         message.parameter.put("AppType", "2");
         message.action=API.ERP.Action.JPushGetJMessageTypeV2;
-        this.hostActivity.SendSoapRequest(message,a->initListView(a));
+        this.hostActivity.SendSoapRequest(message,this::initListView);
     }
 
     public void initListView(SoapObject result){
@@ -55,53 +55,24 @@ public class PageMsg extends Page {
         ArrayList<JpushNoticeTypeBean> lstNotice=
                 com.alibaba.fastjson.JSON.parseObject(json2,new TypeReference<ArrayList<JpushNoticeTypeBean>>() {});
         ListView lstView= (ListView)this.view.findViewById(R.id.lv_type);
-        lstView.setAdapter(new MsgAdapter(this.hostActivity,lstNotice));
+        BwListAdapter<JpushNoticeTypeBean> adapter= new BwListAdapter(this.hostActivity,lstNotice);
+        adapter.createViewHandler=this::createMsgItemView;
+        lstView.setAdapter(new BwListAdapter(this.hostActivity,lstNotice));
     }
 
-
-
-    public class MsgAdapter extends BaseAdapter {
-        private BwActivity context;
-        private List<JpushNoticeTypeBean> lstNotice;
-
-        public MsgAdapter(BwActivity context, List<JpushNoticeTypeBean> lstNotice) {
-
-            this.context=context;
-            this.lstNotice=lstNotice;
-        }
-
-        @Override
-        public int getCount() {
-            return lstNotice.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-             return lstNotice.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return this.lstNotice.get(position).hashCode();
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView!=null)
-                return convertView;
-            convertView = View.inflate(this.context,R.layout.page_msg_item,null);
-            JpushNoticeTypeBean notice=this.lstNotice.get(position);
-            ((TextView) convertView.findViewById(R.id.tv_type_name)).setText(notice.getName());
-            ((TextView) convertView.findViewById(R.id.tv_all_num)).setText("全部："+(Integer.valueOf(notice.getIsReadNum())+Integer.valueOf(notice.getNoReadNum())));
-            ((TextView) convertView.findViewById(R.id.tv_unread)).setText("未读："+Integer.valueOf(notice.getNoReadNum()));
-            ((TextView) convertView.findViewById(R.id.tv_read)).setText("已读："+Integer.valueOf(notice.getIsReadNum()));
-            ImageView imgView=(ImageView) convertView.findViewById(R.id.iv_tag);
-            new Thread(this.context.wrapperRunnable(()->{
-                URL picUrl = new URL(notice.getIconUrl());
-                Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-                this.context.handler.post(this.context.wrapperRunnable(()->imgView.setImageBitmap(pngBM)));
-            })).start();
-            return convertView;
-        }
+    View createMsgItemView(BwActivity context,List<JpushNoticeTypeBean> lstValue,int position) {
+        View view = View.inflate(context,R.layout.page_msg_item,null);
+        JpushNoticeTypeBean notice=lstValue.get(position);
+        ((TextView) view.findViewById(R.id.tv_type_name)).setText(notice.getName());
+        ((TextView) view.findViewById(R.id.tv_all_num)).setText("全部："+(Integer.valueOf(notice.getIsReadNum())+Integer.valueOf(notice.getNoReadNum())));
+        ((TextView) view.findViewById(R.id.tv_unread)).setText("未读："+Integer.valueOf(notice.getNoReadNum()));
+        ((TextView) view.findViewById(R.id.tv_read)).setText("已读："+Integer.valueOf(notice.getIsReadNum()));
+        ImageView imgView=(ImageView) view.findViewById(R.id.iv_tag);
+        new Thread(context.wrapperRunnable(()->{
+            URL picUrl = new URL(notice.getIconUrl());
+            Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+            context.handler.post(context.wrapperRunnable(()->imgView.setImageBitmap(pngBM)));
+        })).start();
+        return view;
     }
 }

@@ -42,8 +42,10 @@ public class MainActivity extends BwActivity {
         lstPage.add(new PageMsg(this));
         lstPage.add(new PageZLQ(this));
         lstPage.add(new PageSetting(this));
-        BwPagerAdapter<Page> adapter=new BwPagerAdapter(lstPage);
-        adapter.instantiateItemHandler=(lst,container,position)->lst.get(position).view;
+        BwPagerAdapter<Page> adapter=new BwPagerAdapter(this,lstPage);
+        adapter.instantiateItemHandler=(context,lst,position)->{
+            return lst.get(position).view;
+        };
         this.viewPager.setAdapter(adapter);
     }
 

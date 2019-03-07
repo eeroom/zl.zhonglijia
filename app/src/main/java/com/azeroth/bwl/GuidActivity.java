@@ -43,8 +43,8 @@ public class GuidActivity extends BwActivity implements ViewPager.OnPageChangeLi
         view=new ImageView(this );
         view.setBackgroundResource(R.drawable.guid003);
         lstImgView.add(view);
-        BwPagerAdapter<ImageView> adapter=new BwPagerAdapter<>(lstImgView);
-        adapter.instantiateItemHandler=(lst,contianer,position)->lst.get(position);
+        BwPagerAdapter<ImageView> adapter=new BwPagerAdapter<>(this,lstImgView);
+        adapter.instantiateItemHandler=(context,lst,position)->lst.get(position);
         this.vpview.setAdapter(adapter);
     }
 
