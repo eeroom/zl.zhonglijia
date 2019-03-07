@@ -31,6 +31,11 @@ public class LoginActivity extends BwActivity {
         this.findViewById(R.id.loginBtnOk).setOnClickListener(this.wrapperOnclickListener(x -> this.loginBtnOkOnClick(x)));
     }
 
+    @Override
+    public void initData() throws Exception {
+
+    }
+
     private void loginBtnOkOnClick(View view) throws Exception {
         this.redirectToHome("111");
         return;
@@ -84,4 +89,6 @@ public class LoginActivity extends BwActivity {
         this.startActivity(it);
         this.finish();
     }
+
+
 }

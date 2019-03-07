@@ -25,12 +25,15 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
         alAnimation.setDuration(500);
         alAnimation.setAnimationListener(this);
         layout.setAnimation(alAnimation);
-
 //        RotateAnimation ra=new RotateAnimation(0f,360f,Animation.RELATIVE_TO_SELF,
 //                0.5f,Animation.RELATIVE_TO_SELF,0.5f);
 //        ra.setDuration(1000);
 //        ra.setAnimationListener(this);
 //        layout.setAnimation(ra);
+    }
+
+    @Override
+    public void initData() throws Exception {
 
     }
     @Override
@@ -53,6 +56,7 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
     public void onAnimationRepeat(Animation animation){
 
     }
+
 
 
 }

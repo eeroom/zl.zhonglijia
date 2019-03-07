@@ -21,14 +21,31 @@ import java.util.ArrayList;
 
 public class GuidActivity extends BwActivity implements ViewPager.OnPageChangeListener {
 
+    ViewPager vpview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guid);
-        ViewPager vpview= (ViewPager)this.findViewById(R.id.guidVpview);
-        vpview.setAdapter(new GuidAdapter(this));
+        this.vpview= (ViewPager)this.findViewById(R.id.guidVpview);
         vpview.addOnPageChangeListener(this);
         this.findViewById(R.id.guidBtnOk).setOnClickListener(this.wrapperOnclickListener(x->this.guidBtnOkOnClick(x)));
+    }
+
+    @Override
+    public void initData() throws Exception {
+        ArrayList<ImageView> lstImgView=new ArrayList<ImageView>();
+        ImageView view=new ImageView(this);
+        view.setBackgroundResource(R.drawable.guid001);
+        lstImgView.add(view);
+        view=new ImageView(this);
+        view.setBackgroundResource(R.drawable.guid002);
+        lstImgView.add(view);
+        view=new ImageView(this );
+        view.setBackgroundResource(R.drawable.guid003);
+        lstImgView.add(view);
+        BwPagerAdapter<ImageView> adapter=new BwPagerAdapter<>(lstImgView);
+        adapter.instantiateItemHandler=(lst,contianer,position)->lst.get(position);
+        this.vpview.setAdapter(adapter);
     }
 
     public void guidBtnOkOnClick(View view){
@@ -59,47 +76,5 @@ public class GuidActivity extends BwActivity implements ViewPager.OnPageChangeLi
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-    class GuidAdapter extends  PagerAdapter{
-        Context context;
-        ArrayList<ImageView> lstImgView;
-        GuidAdapter(Context context){
-            this.context=context;
-            this.lstImgView=new ArrayList<ImageView>();
-            ImageView view=new ImageView(context);
-            view.setBackgroundResource(R.drawable.guid001);
-            this.lstImgView.add(view);
-            view=new ImageView(context);
-            view.setBackgroundResource(R.drawable.guid002);
-            this.lstImgView.add(view);
-            view=new ImageView(context);
-            view.setBackgroundResource(R.drawable.guid003);
-            this.lstImgView.add(view);
-        }
-
-
-        @Override
-        public int getCount() {
-            return this.lstImgView.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view==object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            View view=this.lstImgView.get(position);
-            container.addView(view);
-            return  view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(this.lstImgView.get(position));
-            //super.destroyItem(container, position, object);
-        }
     }
 }

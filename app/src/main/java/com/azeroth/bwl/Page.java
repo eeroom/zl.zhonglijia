@@ -21,8 +21,6 @@ public abstract class Page {
                 msg=ex.getClass().getName();
             Toast.makeText(this.hostActivity,ex.getMessage(),Toast.LENGTH_SHORT).show();
         }
-
-
     }
     public abstract void initData() throws Exception;
     public abstract void  initView() throws Exception;

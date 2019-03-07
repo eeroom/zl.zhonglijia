@@ -3,9 +3,11 @@ package com.azeroth.bwl;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -29,9 +31,21 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import com.azeroth.utility.*;
-public class BwActivity extends Activity
+public abstract class BwActivity extends Activity
 {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            this.initData();
+        }catch (Exception ex){
+            Toast.makeText(this,ex.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
     Handler handler=new Handler();
+
+    public abstract void initData() throws Exception;
 
     protected View.OnClickListener wrapperOnclickListener(FunctionWrapper<View> fn){
         return x->{
