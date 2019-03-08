@@ -61,7 +61,7 @@ public class PageMsg extends Page {
         lstView.setAdapter(adapter);
     }
 
-    View createMsgItemView(BwActivity context,List<JpushNoticeTypeBean> lstValue,int position) {
+    View createMsgItemView(BwActivity context,List<JpushNoticeTypeBean> lstValue,int position,Object tag) {
         View view = View.inflate(context,R.layout.page_msg_item,null);
         JpushNoticeTypeBean notice=lstValue.get(position);
         ((TextView) view.findViewById(R.id.tv_type_name)).setText(notice.getName());

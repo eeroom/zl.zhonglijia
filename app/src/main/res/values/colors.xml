@@ -3,4 +3,145 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="teast">#FF9B12</color>
+    <!--黑色-->
+    <color name="black">#000000</color>
+    <!--灰色-->
+    <color name="gray">#1d232f</color>
+    <color name="gray07">#757575</color>
+    <color name="gray01">#dbdbdb</color>
+    <color name="gray02">#CFCFCF</color>
+    <color name="gray03">#EEE9E9</color>
+    <color name="gray04">#EAEAEA</color>
+    <color name="gray05">#EDEDED</color>
+    <color name="gray06">#EDEDED</color>
+
+
+    <color name="province_line_border">#D0D0D0</color>
+
+    <!--紫色-->
+
+    <color name="zise">#7B68EE</color>
+    <color name="blue">#1C86EE</color>
+    <color name="green">#32CD32</color>
+    <color name="yellow">#EEB422</color>
+    <color name="pink">#EE30A7</color>
+
+
+    <color name="moren">#13A4D3</color>
+
+    <color name="red">#ee1e1e</color>
+
+    <color name="app_theme">#00A2E8</color>
+
+    <color name="global_activity_background">#EAEAEA</color>
+
+    <color name="global_layout_background">#FAFAFA</color>
+
+    <color name="global_divider_background">#CCCCCC</color>
+
+    <color name="activity_navigation_tab_indicator_background">#E6E6E6</color>
+
+    <color name="global_highlight">#FF0000</color>
+
+    <color name="global_text_primary">#000000</color>
+
+    <color name="global_text_inverse">#FFFFFF</color>
+
+    <color name="global_text_secondary">#323232</color>
+
+
+    <color name="background_gradient_start">#000000</color>
+
+    <color name="background_gradient_end">#DDDDDD</color>
+
+    <color name="fastlane_background">#0096a6</color>
+
+    <color name="search_opaque">#ffaa3f</color>
+
+    <color name="detail_background">#0096a6</color>
+
+    <color name="soft_opaque">#30000000</color>
+
+    <color name="img_soft_opaque">#30FF0000</color>
+
+    <color name="img_full_opaque">#00000000</color>
+
+    <color name="black_opaque">#AA000000</color>
+
+
+    <color name="white">#FFFFFF</color>
+
+    <color name="whites">#F2F2F2</color>
+
+    <color name="white_35">#65451A09</color>
+
+
+    <color name="orange_transparent">#AAFADCA7</color>
+
+    <color name="orange">#FADCA7</color>
+
+
+    <color name="default_background">#3d3d3d</color>
+
+    <color name="button_enabled">#EBEBEB</color>
+
+    <color name="holo_blue_light">#ff33b5e5</color>
+
+    <color name="holo_blue_dark">#ff0099cc</color>
+
+    <color name="holo_green_light">#ff99cc00</color>
+
+    <color name="holo_green_dark">#ff669900</color>
+
+    <color name="dark">#FF222222</color>
+
+    <color name="light">#FFEEEEEE</color>
+    <color name="linecolor">#e8e8e8</color>
+    <color name="blackwordcolor">#333333</color>
+    <color name="baseredcolor">#fb4747</color>
+
+    <color name="activity_background_color">#f6f6f6</color>
+    <color name="bg_shouyi">#eef2f6</color>
+    <color name="jianbian_1">#ec7033</color>
+    <color name="jianbian_2">#d33a0a</color>
+    <color name="big_yuan">#ec7033</color>
+    <color name="small_yuan">#ea9271</color>
+    <color name="text_bg">#e45734</color>
+    <color name="crimson">#DC143C</color><!--暗深红色 -->
+    <!--<color other_name="line_color">#e1e1e1</color>-->
+    <color name="transparent">#00ffffff</color>
+    <color name="transparent_50">#50ffffff</color>
+    <color name="transparent_42">#42000000</color>
+    <color name="rollout_but">#3a99d4</color>
+    <color name="rollout_but_selected">#FFFFFF</color>
+
+    <color name="test">#FF0000</color>
+
+
+    <color name="e7">#e7e7e7</color>
+    <color name="gray_font">#868686</color>
+    <color name="title_text_color">#333333</color>
+    <color name="content_text_color">#666666</color>
+    <color name="fuzhu_text_color">#999999</color>
+    <color name="line_color">#eef2f6</color>
+    <color name="bg_color">#f9f9f9</color>
+    <color name="main_bg_color">#57c18d</color>
+    <color name="yellow_color">#f8b55e</color>
+    <color name="green_color">#09bbb0</color>
+    <color name="red_color">#fb6e6e</color>
+    <color name="purple_color">#c976f3</color>
+    <color name="blue_color">#00b5f2</color>
+    <color name="hint_color">#c7c7c7</color>
+    <color name="fenge_color">#eaf4f2</color>
+    <color name="line">#eeeeee</color>
+
+    <!--中力圈色值-->
+    <color name="main_text_color">#4db07f</color>
+    <color name="default_clickable_color">#cccccc</color>
+    <color name="name_selector_color">#cccccc</color>
+    <color name="im_font_color_text_hint">#abb1b6</color>
+    <color name="color_8290AF">#8290AF</color>
+    <color name="praise_item">#8290AF</color>
 </resources>

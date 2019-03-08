@@ -5,6 +5,7 @@ public class API {
         public static String BassAdrees="https://api.zhongliko.com/webservice/erp_webservice.asmx";
         public static class  Action{
             public static String JPushGetJMessageTypeV2="JPushGetJMessageTypeV2";
+            public  static String JPushGetJMessageLogIndex="JPushGetJMessageLogIndexV2";
         }
     }
 
@@ -12,6 +13,7 @@ public class API {
         public static String BassAdress="https://erp.zhongliko.com/Task/TaskService.asmx";
         public static  class  Action{
             public static  String getMyTaskListForApp="getMyTaskListForApp";
+
         }
     }
 }

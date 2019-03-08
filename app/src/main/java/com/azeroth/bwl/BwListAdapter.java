@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.azeroth.model.JpushNoticeTypeBean;
 import com.azeroth.utility.Function2;
 import com.azeroth.utility.Function3;
+import com.azeroth.utility.Function4;
 
 import java.net.URL;
 import java.util.List;
@@ -20,11 +21,18 @@ public class BwListAdapter<T> extends BaseAdapter {
 
     private BwActivity context;
     private List<T> lstValue;
-    public Function3<BwActivity,List<T>,Integer,View> createViewHandler;
+    private Object tag;
+    public Function4<BwActivity,List<T>,Integer,Object,View> createViewHandler;
     public BwListAdapter(BwActivity context, List<T> lst) {
 
         this.context=context;
         this.lstValue=lst;
+    }
+    public BwListAdapter(BwActivity context, List<T> lst,Object tag) {
+
+        this.context=context;
+        this.lstValue=lst;
+        this.tag=tag;
     }
 
     @Override
@@ -49,6 +57,6 @@ public class BwListAdapter<T> extends BaseAdapter {
             return convertView;
         if(this.createViewHandler==null)
             throw new RuntimeException("createViewHandler不能为null");
-        return this.createViewHandler.run(this.context,this.lstValue,position);
+        return this.createViewHandler.run(this.context,this.lstValue,position,this.tag);
     }
 }
