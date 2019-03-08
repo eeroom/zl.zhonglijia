@@ -12,9 +12,11 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.TypeReference;
 import com.azeroth.model.JMessageBean;
+import com.azeroth.model.QianDaoBean;
 import com.azeroth.model.TaskListBean;
 import com.azeroth.utility.API;
 import com.azeroth.utility.SoapRequestMessage;
+import com.bumptech.glide.Glide;
 
 import org.ksoap2.serialization.SoapObject;
 
@@ -51,7 +53,55 @@ public class PageHome extends Page {
         tipMessage.parameter.put("UnionID",BwApplication.appInstance.userInfo.Tid);
         tipMessage.parameter.put("AppType","2");
         this.hostActivity.SendSoapRequest(tipMessage,this::handlerTipInfo);
+        //签到前三
+        SoapRequestMessage kqMessage=new SoapRequestMessage(API.KQ.BassAdress);
+        kqMessage.action=API.KQ.Action.getRankingsTop3;
+        kqMessage.parameter.put("type","1");
+        this.hostActivity.SendSoapRequest(kqMessage,this::handlerKqTopSignin);
+        //map.put("type", type);
+        //签退前三
+        SoapRequestMessage kqMessageOut=new SoapRequestMessage(API.KQ.BassAdress);
+        kqMessageOut.action=API.KQ.Action.getRankingsTop3;
+        kqMessageOut.parameter.put("type","2");
+        this.hostActivity.SendSoapRequest(kqMessageOut,this::handlerKqTopSignout);
+    }
 
+    void handlerKqTopSignout(SoapObject result){
+        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.KQ.Action.getRankingsTop3 + "Result");
+        String json = provinceSoapObject.getProperty(0).toString();
+        String json2 = provinceSoapObject.getProperty(1).toString();
+        ArrayList<QianDaoBean> qianDaoBeen = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<QianDaoBean>>() {});
+        //this.view.findViewById(R.id.ll_no_late).setVisibility(View.VISIBLE);
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(0).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_go_first));
+        ((TextView)view.findViewById(R.id.tv_name_go_first)).setText(qianDaoBeen.get(0).getContent().get(0).getTrueName());
+        ((TextView)view.findViewById(R.id.tv_go_time1)).setText(qianDaoBeen.get(0).getContent().get(0).getSignInTiem());
+
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(1).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_go_second));
+        ((TextView)view.findViewById(R.id.tv_name_go_second)).setText(qianDaoBeen.get(0).getContent().get(1).getTrueName());
+        ((TextView)view.findViewById(R.id.tv_go_time2)).setText(qianDaoBeen.get(0).getContent().get(1).getSignInTiem());
+
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(2).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_go_third));
+        ((TextView)view.findViewById(R.id.tv_name_go_third)).setText(qianDaoBeen.get(0).getContent().get(2).getTrueName());
+        ((TextView)view.findViewById(R.id.tv_go_time3)).setText(qianDaoBeen.get(0).getContent().get(2).getSignInTiem());
+    }
+
+    void handlerKqTopSignin(SoapObject result){
+        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.KQ.Action.getRankingsTop3 + "Result");
+        String json = provinceSoapObject.getProperty(0).toString();
+        String json2 = provinceSoapObject.getProperty(1).toString();
+        ArrayList<QianDaoBean> qianDaoBeen = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<QianDaoBean>>() {});
+        //this.view.findViewById(R.id.ll_no_first).setVisibility(View.VISIBLE);
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(0).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_come_first));
+        ((TextView)view.findViewById(R.id.tv_name_come_first)).setText(qianDaoBeen.get(0).getContent().get(0).getTrueName());
+        ((TextView)view.findViewById(R.id.tv_time1)).setText(qianDaoBeen.get(0).getContent().get(0).getSignInTiem());
+
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(1).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_come_second));
+        ((TextView)view.findViewById(R.id.tv_name_come_second)).setText(qianDaoBeen.get(0).getContent().get(1).getTrueName());
+        ((TextView)view.findViewById(R.id.tv_time2)).setText(qianDaoBeen.get(0).getContent().get(1).getSignInTiem());
+
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(2).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_come_third));
+        ((TextView)view.findViewById(R.id.tv_name_come_third)).setText(qianDaoBeen.get(0).getContent().get(2).getTrueName());
+        ((TextView)view.findViewById(R.id.tv_time3)).setText(qianDaoBeen.get(0).getContent().get(2).getSignInTiem());
     }
 
     void handlerTipInfo(SoapObject result){
@@ -74,11 +124,13 @@ public class PageHome extends Page {
         JMessageBean model=lstValue.get(position);
         tvTitle.setText(model.getTitle());
         tvDate.setText(model.getNewTime());
-        new Thread(context.wrapperRunnable(()->{
-            URL picUrl = new URL(model.getHeadImg());
-            Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-            context.handler.post(context.wrapperRunnable(()->ivIcon.setImageBitmap(pngBM)));
-        })).start();
+        Glide.with(this.hostActivity).load(model.getHeadImg()).into(ivIcon);
+
+//        new Thread(context.wrapperRunnable(()->{
+//            URL picUrl = new URL(model.getHeadImg());
+//            Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+//            context.handler.post(context.wrapperRunnable(()->ivIcon.setImageBitmap(pngBM)));
+//        })).start();
         return view;
         //ImageLoaderUtil.loadImage(context,newsListsBean.get(position).getHeadImg(),holder.ivIcon);
     }

@@ -20,6 +20,7 @@ import com.azeroth.model.UserInfo;
 import com.azeroth.utility.API;
 import com.azeroth.utility.RT;
 import com.azeroth.utility.SoapRequestMessage;
+import com.bumptech.glide.Glide;
 
 import org.ksoap2.serialization.SoapObject;
 
@@ -69,11 +70,12 @@ public class PageMsg extends Page {
         ((TextView) view.findViewById(R.id.tv_unread)).setText("未读："+Integer.valueOf(notice.getNoReadNum()));
         ((TextView) view.findViewById(R.id.tv_read)).setText("已读："+Integer.valueOf(notice.getIsReadNum()));
         ImageView imgView=(ImageView) view.findViewById(R.id.iv_tag);
-        new Thread(context.wrapperRunnable(()->{
-            URL picUrl = new URL(notice.getIconUrl());
-            Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-            context.handler.post(context.wrapperRunnable(()->imgView.setImageBitmap(pngBM)));
-        })).start();
+        Glide.with(this.hostActivity).load(notice.getIconUrl()).into(imgView);
+//        new Thread(context.wrapperRunnable(()->{
+//            URL picUrl = new URL(notice.getIconUrl());
+//            Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+//            context.handler.post(context.wrapperRunnable(()->imgView.setImageBitmap(pngBM)));
+//        })).start();
         return view;
     }
 }
