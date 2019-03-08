@@ -7,7 +7,8 @@ public class API {
             public static String JPushGetJMessageTypeV2="JPushGetJMessageTypeV2";
             public  static String JPushGetJMessageLogIndex="JPushGetJMessageLogIndexV2";
 
-
+            public final static String GetUserHomeMenu  = "GetUserHomeMenu";//获取用户首页权限和所有权限接口
+            public final static String GETCOMPANYTRIPOFFULLPICTURE = "GetCompanyTripOFFullPicture";//获取老师信息，用来选择同行老师：
         }
     }
 

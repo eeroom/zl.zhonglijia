@@ -1,26 +1,28 @@
 package com.azeroth.bwl;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.TypeReference;
+import com.azeroth.model.CompanyDateTripBean;
 import com.azeroth.model.JMessageBean;
 import com.azeroth.model.QianDaoBean;
 import com.azeroth.model.TaskListBean;
+import com.azeroth.model.UserAllBean;
 import com.azeroth.utility.API;
 import com.azeroth.utility.SoapRequestMessage;
 import com.bumptech.glide.Glide;
 
+import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,13 +42,11 @@ public class PageHome extends Page {
         ((TextView)this.view.findViewById(R.id.home_tv_day)).setText(new SimpleDateFormat("dd").format(dateTimeNow));
         ((TextView)this.view.findViewById(R.id.home_tv_month)).setText(new SimpleDateFormat("yyyy.MM").format(dateTimeNow));
         ((TextView)this.view.findViewById(R.id.home_tv_week)).setText(new SimpleDateFormat("EEEE").format(dateTimeNow));
-
         //获取任务
         SoapRequestMessage message=new SoapRequestMessage(API.ERPTask.BassAdress);
         message.action=API.ERPTask.Action.getMyTaskListForApp;
         message.parameter.put("UR_TR_UNION_ID",BwApplication.appInstance.userInfo.Tid);
         this.hostActivity.SendSoapRequest(message,this::handlerTaskInfo);
-
         //获取最新提醒
         SoapRequestMessage tipMessage=new SoapRequestMessage(API.ERP.BassAdrees);
         tipMessage.action=API.ERP.Action.JPushGetJMessageLogIndex;
@@ -64,6 +64,63 @@ public class PageHome extends Page {
         kqMessageOut.action=API.KQ.Action.getRankingsTop3;
         kqMessageOut.parameter.put("type","2");
         this.hostActivity.SendSoapRequest(kqMessageOut,this::handlerKqTopSignout);
+        //移动办公
+        SoapRequestMessage menuMessage=new SoapRequestMessage(API.ERP.BassAdrees);
+        menuMessage.action=API.ERP.Action.GetUserHomeMenu;
+        //map.put("UNION_ID", UNION_ID);//评论对象的ID
+        menuMessage.parameter.put("UNION_ID",BwApplication.appInstance.userInfo.Tid);
+        this.hostActivity.SendSoapRequest(menuMessage,this::handlerMenu);
+        //当月课程安排
+        SoapRequestMessage kechengMessage=new SoapRequestMessage(API.ERP.BassAdrees);
+        kechengMessage.action=API.ERP.Action.GETCOMPANYTRIPOFFULLPICTURE;
+        kechengMessage.parameter.put("Time",new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        this.hostActivity.SendSoapRequest(kechengMessage,this::handlerKecheng);
+    }
+
+    void handlerKecheng(SoapObject result){
+        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERP.Action.GETCOMPANYTRIPOFFULLPICTURE + "Result");
+        String json = provinceSoapObject.getProperty(0).toString();
+        String json2 = provinceSoapObject.getProperty(1).toString();
+        ArrayList<CompanyDateTripBean> lstKecheng = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<CompanyDateTripBean>>() {});
+        BwListAdapter<CompanyDateTripBean> adapter=new BwListAdapter<>(this.hostActivity,lstKecheng);
+        adapter.createViewHandler=this::createKechengItemView;
+        ListView lv= (ListView)this.view.findViewById(R.id.lv_kecheng);
+        lv.setAdapter(adapter);
+    }
+
+    View createKechengItemView(BwActivity context, List<CompanyDateTripBean> lstValue, int position,Object tag){
+        View view=View.inflate(this.hostActivity,R.layout.page_home_kecheng_item,null);
+        TextView tvName = (TextView) view.findViewById(R.id.tv_name);
+        TextView tvDate = (TextView) view.findViewById(R.id.tv_date);
+        tvName.setText(lstValue.get(position).getYS_DESC());
+        tvDate.setText(lstValue.get(position).getStart() + "至" + lstValue.get(position).getEnd());
+        return view;
+    }
+
+
+    void handlerMenu(SoapObject result) throws Exception{
+        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERP.Action.GetUserHomeMenu + "Result");
+        String json = provinceSoapObject.getProperty(0).toString();
+        String json2 = provinceSoapObject.getProperty(1).toString();
+        String userSelect = new JSONObject(json2).optString("UserSelect");
+        String UserAll = new JSONObject(json2).optString("UserAll");
+        ArrayList<UserAllBean> lstMenu = com.alibaba.fastjson.JSON.parseObject(userSelect,  new TypeReference<ArrayList<UserAllBean>>() {});
+        BwListAdapter<UserAllBean.PrivilegeBean> adapter=new BwListAdapter<>(this.hostActivity,lstMenu.get(0).getPrivilege());
+        adapter.createViewHandler=this::createMenuItemView;
+        GridView gdView= (GridView)this.view.findViewById(R.id.gv_content);
+        gdView.setAdapter(adapter);
+    }
+
+    View createMenuItemView(BwActivity context, List<UserAllBean.PrivilegeBean> lstValue, int position,Object tag){
+        View view=View.inflate(context,R.layout.page_home_menu_item,null);
+        ImageView  ivIcon = (ImageView) view.findViewById(R.id.iv_icon);
+        TextView tvName = (TextView) view.findViewById(R.id.tv_name);
+        tvName.setText(lstValue.get(position).getNAME());
+        Glide.with(context).load(lstValue.get(position).getICON()).into(ivIcon);
+//        RelativeLayout  mainview = (RelativeLayout) view.findViewById(R.id.ll_menu_item);
+//        AbsListView.LayoutParams params = new AbsListView.LayoutParams((ScreenUtils.getScreenWidth(view.getContext()) - DensityUtils.dp2px(mContext, 2)) / 4, ScreenUtils.getScreenWidth(view.getContext()) / 4);
+        //mainview.setLayoutParams(params);
+        return view;
     }
 
     void handlerKqTopSignout(SoapObject result){
@@ -111,12 +168,12 @@ public class PageHome extends Page {
         ArrayList<JMessageBean> lstRT=
                 com.alibaba.fastjson.JSON.parseObject(json2,new TypeReference<ArrayList<JMessageBean>>() {});
         BwListAdapter<JMessageBean> adapter=new BwListAdapter<>(this.hostActivity,lstRT);
-        adapter.createViewHandler=this::creatTipItemView;
+        adapter.createViewHandler=this::createTipItemView;
         ListView lvTip= (ListView)this.view.findViewById(R.id.home_lv_tip);
         lvTip.setAdapter(adapter);
     }
 
-    View creatTipItemView(BwActivity context, List<JMessageBean> lstValue, int position,Object tag){
+    View createTipItemView(BwActivity context, List<JMessageBean> lstValue, int position, Object tag){
         View view=View.inflate(context,R.layout.page_home_tip_item,null);
         ImageView  ivIcon = (ImageView) view.findViewById(R.id.iv_icon);
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
@@ -125,14 +182,7 @@ public class PageHome extends Page {
         tvTitle.setText(model.getTitle());
         tvDate.setText(model.getNewTime());
         Glide.with(this.hostActivity).load(model.getHeadImg()).into(ivIcon);
-
-//        new Thread(context.wrapperRunnable(()->{
-//            URL picUrl = new URL(model.getHeadImg());
-//            Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-//            context.handler.post(context.wrapperRunnable(()->ivIcon.setImageBitmap(pngBM)));
-//        })).start();
         return view;
-        //ImageLoaderUtil.loadImage(context,newsListsBean.get(position).getHeadImg(),holder.ivIcon);
     }
 
     void handlerTaskInfo(SoapObject result){
@@ -143,12 +193,12 @@ public class PageHome extends Page {
                 com.alibaba.fastjson.JSON.parseObject(json2,new TypeReference<ArrayList<TaskListBean>>() {});
         TaskListBean taskWrapper=lstRT.get(0);
         BwListAdapter<TaskListBean.DataBean> adapter=new BwListAdapter<>(this.hostActivity,taskWrapper.getData(),taskWrapper);
-        adapter.createViewHandler=this::creatTaskItemView;
+        adapter.createViewHandler=this::createTaskItemView;
         ListView lvTask= (ListView)this.view.findViewById(R.id.home_lv_task);
         lvTask.setAdapter(adapter);
     }
 
-    View creatTaskItemView(BwActivity context, List<TaskListBean.DataBean> lstValue, int position,Object tag){
+    View createTaskItemView(BwActivity context, List<TaskListBean.DataBean> lstValue, int position, Object tag){
         TaskListBean taskDateBeen=(TaskListBean)tag;
         View view=View.inflate(context,R.layout.page_home_task_item,null);
         TextView tvFlag = (TextView) view.findViewById(R.id.tv_flag);
@@ -189,8 +239,4 @@ public class PageHome extends Page {
         }
         return view;
     }
-
-
-
-
 }
