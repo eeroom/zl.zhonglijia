@@ -202,14 +202,14 @@
                         android:layout_centerVertical="true"
                         android:src="@mipmap/next1" />
                 </RelativeLayout>
-                <ListView
+                <com.azeroth.view.ListViewNoScroll
                     android:id="@+id/home_lv_task_user"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ListView>
-                <ListView
+                    android:layout_height="wrap_content"></com.azeroth.view.ListViewNoScroll>
+                <com.azeroth.view.ListViewNoScroll
                     android:id="@+id/home_lv_task_discuss"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ListView>
+                    android:layout_height="wrap_content"></com.azeroth.view.ListViewNoScroll>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

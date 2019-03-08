@@ -54,10 +54,11 @@ public class PageMsg extends Page {
         String json2 = provinceSoapObject.getProperty(1).toString();
         ArrayList<JpushNoticeTypeBean> lstNotice=
                 com.alibaba.fastjson.JSON.parseObject(json2,new TypeReference<ArrayList<JpushNoticeTypeBean>>() {});
-        ListView lstView= (ListView)this.view.findViewById(R.id.lv_type);
         BwListAdapter<JpushNoticeTypeBean> adapter= new BwListAdapter(this.hostActivity,lstNotice);
         adapter.createViewHandler=this::createMsgItemView;
-        lstView.setAdapter(new BwListAdapter(this.hostActivity,lstNotice));
+
+        ListView lstView= (ListView)this.view.findViewById(R.id.lv_type);
+        lstView.setAdapter(adapter);
     }
 
     View createMsgItemView(BwActivity context,List<JpushNoticeTypeBean> lstValue,int position) {

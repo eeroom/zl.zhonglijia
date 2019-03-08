@@ -21,10 +21,10 @@ public class BwListAdapter<T> extends BaseAdapter {
     private BwActivity context;
     private List<T> lstValue;
     public Function3<BwActivity,List<T>,Integer,View> createViewHandler;
-    public BwListAdapter(BwActivity context, List<T> lstNotice) {
+    public BwListAdapter(BwActivity context, List<T> lst) {
 
         this.context=context;
-        this.lstValue=lstNotice;
+        this.lstValue=lst;
     }
 
     @Override
@@ -47,11 +47,8 @@ public class BwListAdapter<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView!=null)
             return convertView;
-        try {
-            return this.createViewHandler.run(this.context,this.lstValue,position);
-        }catch (Exception ex){
-            Toast.makeText(this.context,ex.getMessage(),Toast.LENGTH_SHORT).show();
-            return null;
-        }
+        if(this.createViewHandler==null)
+            throw new RuntimeException("createViewHandler不能为null");
+        return this.createViewHandler.run(this.context,this.lstValue,position);
     }
 }
