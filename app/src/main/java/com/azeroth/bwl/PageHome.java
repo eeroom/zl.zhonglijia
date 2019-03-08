@@ -4,11 +4,13 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.TypeReference;
 import com.azeroth.model.CompanyDateTripBean;
@@ -29,12 +31,14 @@ import java.util.Date;
 import java.util.List;
 
 public class PageHome extends Page {
+    GridView gvMenu;
     public PageHome(BwActivity activity){
         super(activity,View.inflate(activity,R.layout.page_home,null));
+         this.gvMenu=(GridView)this.view.findViewById(R.id.gv_content);
     }
     @Override
     public void initView() throws Exception{
-
+        //this.gvMenu.setOnItemClickListener(this::gvMenuOnItemClick);
     }
     @Override
     public void initData() throws Exception {
@@ -76,7 +80,10 @@ public class PageHome extends Page {
         kechengMessage.parameter.put("Time",new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         this.hostActivity.SendSoapRequest(kechengMessage,this::handlerKecheng);
     }
-
+    void  gvMenuOnItemClick(AdapterView<?> parent, View view, int position, long id){
+        UserAllBean.PrivilegeBean model= (UserAllBean.PrivilegeBean)view.getTag();
+        Toast.makeText(this.hostActivity,com.alibaba.fastjson.JSON.toJSONString(model),Toast.LENGTH_SHORT).show();
+    }
     void handlerKecheng(SoapObject result){
         SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERP.Action.GETCOMPANYTRIPOFFULLPICTURE + "Result");
         String json = provinceSoapObject.getProperty(0).toString();
@@ -107,8 +114,7 @@ public class PageHome extends Page {
         ArrayList<UserAllBean> lstMenu = com.alibaba.fastjson.JSON.parseObject(userSelect,  new TypeReference<ArrayList<UserAllBean>>() {});
         BwListAdapter<UserAllBean.PrivilegeBean> adapter=new BwListAdapter<>(this.hostActivity,lstMenu.get(0).getPrivilege());
         adapter.createViewHandler=this::createMenuItemView;
-        GridView gdView= (GridView)this.view.findViewById(R.id.gv_content);
-        gdView.setAdapter(adapter);
+        this.gvMenu.setAdapter(adapter);
     }
 
     View createMenuItemView(BwActivity context, List<UserAllBean.PrivilegeBean> lstValue, int position,Object tag){
@@ -117,6 +123,7 @@ public class PageHome extends Page {
         TextView tvName = (TextView) view.findViewById(R.id.tv_name);
         tvName.setText(lstValue.get(position).getNAME());
         Glide.with(context).load(lstValue.get(position).getICON()).into(ivIcon);
+        view.setTag(lstValue.get(position));
 //        RelativeLayout  mainview = (RelativeLayout) view.findViewById(R.id.ll_menu_item);
 //        AbsListView.LayoutParams params = new AbsListView.LayoutParams((ScreenUtils.getScreenWidth(view.getContext()) - DensityUtils.dp2px(mContext, 2)) / 4, ScreenUtils.getScreenWidth(view.getContext()) / 4);
         //mainview.setLayoutParams(params);

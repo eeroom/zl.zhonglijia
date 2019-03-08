@@ -13,7 +13,7 @@
             <RelativeLayout
                 android:id="@+id/top_layout"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="100dp"
                 android:background="@mipmap/topbg1">
                 <TextView
                     android:id="@+id/home_tv_day"
@@ -220,64 +220,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:src="@mipmap/icon_hp_arrange" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:text="当月安排课程"
-                            android:textColor="#999999"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                </RelativeLayout>
-                <com.azeroth.view.ListViewNoScroll
-                    android:id="@+id/lv_kecheng"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="14dp"
-                    android:divider="#00ffffff"
-                    android:dividerHeight="12dp" />
-
-                <LinearLayout
-                    android:id="@+id/ll_no_course"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="31dp"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@mipmap/icon_hp_no_courses"
-                        android:drawablePadding="6dp"
-                        android:gravity="center"
-                        android:text="当月暂无课程安排" />
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
                 <RelativeLayout
                     android:id="@+id/rl_task"
                     android:layout_width="match_parent"
@@ -357,6 +299,64 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </com.azeroth.view.ListViewNoScroll>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@mipmap/icon_hp_arrange" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="当月安排课程"
+                            android:textColor="#999999"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+                <com.azeroth.view.ListViewNoScroll
+                    android:id="@+id/lv_kecheng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="14dp"
+                    android:divider="#00ffffff"
+                    android:dividerHeight="12dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_no_course"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="31dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@mipmap/icon_hp_no_courses"
+                        android:drawablePadding="6dp"
+                        android:gravity="center"
+                        android:text="当月暂无课程安排" />
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -747,7 +747,6 @@
                         android:text="暂无加班最晚" />
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
