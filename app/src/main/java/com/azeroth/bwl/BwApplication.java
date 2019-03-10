@@ -17,5 +17,8 @@ public class BwApplication extends Application {
         this.userInfo.Id="169";
         this.userInfo.Tid="test-c3ec8232-0269-4970-ae4a";
         this.userInfo.NickName="何涛";
+
+        cn.jpush.android.api.JPushInterface.setDebugMode(true);
+        cn.jpush.android.api.JPushInterface.init(this);
     }
 }

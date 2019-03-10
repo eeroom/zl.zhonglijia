@@ -17,18 +17,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends BwActivity {
+public class MainActivity extends BwActivity  {
 
     HashMap<Integer,Integer> dictRadioAndVpIndex=new HashMap<>();
     ViewPagerNoScroll viewPager;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void initView() throws Exception {
         setContentView(R.layout.activity_main);
         ((RadioGroup)this.findViewById(R.id.mainRadioGroup)).setOnCheckedChangeListener(this::radioGroupOnCheckedChange);
         this.viewPager=(ViewPagerNoScroll)this.findViewById(R.id.mainViewPage);
     }
-
     @Override
     public void initData() throws Exception {
         dictRadioAndVpIndex.put(R.id.mainRadioBtnHome,0);
@@ -43,10 +42,18 @@ public class MainActivity extends BwActivity {
         lstPage.add(new PageZLQ(this));
         lstPage.add(new PageSetting(this));
         BwPagerAdapter<Page> adapter=new BwPagerAdapter(this,lstPage);
-        adapter.instantiateItemHandler=(context,lst,position)->{
-            return lst.get(position).view;
-        };
+        adapter.instantiateItemHandler=(context,lst,position)->lst.get(position).view;
         this.viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent home = new Intent(Intent.ACTION_MAIN);
+        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        home.addCategory(Intent.CATEGORY_HOME);
+        startActivity(home);
+
     }
 
     public void radioGroupOnCheckedChange(RadioGroup group, int checkedId)

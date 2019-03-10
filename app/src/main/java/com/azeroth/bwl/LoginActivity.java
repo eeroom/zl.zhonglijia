@@ -21,12 +21,17 @@ public class LoginActivity extends BwActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sp = this.getSharedPreferences(SpBucket.Index.Login, MODE_PRIVATE);
-        String userInfo = sp.getString(SpBucket.Item.UserInfo, "");
-        if (!userInfo.isEmpty()) {
-            this.redirectToHome(userInfo);
-            return;
-        }
+
+    }
+    @Override
+    public void initView() throws Exception {
+        //        SharedPreferences sp = this.getSharedPreferences(SpBucket.Index.Login, MODE_PRIVATE);
+//        String userInfo = sp.getString(SpBucket.Item.UserInfo, "");
+//        if (!userInfo.isEmpty()) {
+//            this.redirectToHome(userInfo);
+//            return;
+//        }
+
         setContentView(R.layout.activity_login);
         this.findViewById(R.id.loginBtnOk).setOnClickListener(this.wrapperOnclickListener(x -> this.loginBtnOkOnClick(x)));
     }
@@ -36,7 +41,10 @@ public class LoginActivity extends BwActivity {
 
     }
 
+
+
     private void loginBtnOkOnClick(View view) throws Exception {
+        BwApplication.appInstance.userInfo.CellPhoneNumber=((TextView) this.findViewById(R.id.loginTxtName)).getText().toString();
         this.redirectToHome("111");
         return;
 //        HttpRequestMessage message = new HttpRequestMessage("http://192.168.23.231:3161/Home/Login");
@@ -83,6 +91,7 @@ public class LoginActivity extends BwActivity {
     }
 
     private void redirectToHome(String userInfo) {
+        cn.jpush.android.api.JPushInterface.setAlias(BwApplication.appInstance,1,BwApplication.appInstance.userInfo.CellPhoneNumber);
         Intent it = new Intent();
         it.setClass(this, MainActivity.class);
         it.putExtra(SpBucket.Item.UserInfo, com.alibaba.fastjson.JSON.toJSONString(userInfo));

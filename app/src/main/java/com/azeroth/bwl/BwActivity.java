@@ -34,19 +34,23 @@ import com.azeroth.utility.*;
 public abstract class BwActivity extends Activity
 {
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         try {
+            this.initView();
             this.initData();
         }catch (Exception ex){
-            Toast.makeText(this,ex.getMessage(),Toast.LENGTH_SHORT).show();
+            String msg=ex.getMessage();
+            if(msg.isEmpty())
+                msg=ex.getClass().getName();
+            Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
         }
     }
 
     Handler handler=new Handler();
 
     public abstract void initData() throws Exception;
-
+    public abstract void initView() throws Exception;
     protected View.OnClickListener wrapperOnclickListener(FunctionWrapper<View> fn){
         return x->{
           try {
@@ -119,6 +123,8 @@ public abstract class BwActivity extends Activity
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty("Content-Type", "application/json");
+            if(message.beforSend!=null)
+                message.beforSend.run(connection,message);
             connection.connect();
             // POST请求
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());

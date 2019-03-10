@@ -19,6 +19,11 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void initView() throws Exception {
         setContentView(R.layout.activity_splash);
         LinearLayout layout= (LinearLayout)this.findViewById(R.id.layoutSplash);
         AlphaAnimation alAnimation=new AlphaAnimation(0,255);
@@ -36,6 +41,9 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
     public void initData() throws Exception {
 
     }
+
+
+
     @Override
    public   void onAnimationStart(Animation animation){
 

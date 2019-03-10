@@ -16,6 +16,7 @@ import com.azeroth.utility.Function4;
 
 import java.net.URL;
 import java.util.List;
+import java.util.stream.LongStream;
 
 public class BwListAdapter<T> extends BaseAdapter {
 
@@ -43,12 +44,12 @@ public class BwListAdapter<T> extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return lstValue.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return lstValue.get(position).hashCode();
     }
 
     @Override

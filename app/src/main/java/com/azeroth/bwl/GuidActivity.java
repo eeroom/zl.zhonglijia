@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.azeroth.model.SpBucket;
 import com.azeroth.utility.FunctionWrapper;
 import com.azeroth.utility.HttpRequestMessage;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -25,28 +26,42 @@ public class GuidActivity extends BwActivity implements ViewPager.OnPageChangeLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void initView() throws Exception {
         setContentView(R.layout.activity_guid);
         this.vpview= (ViewPager)this.findViewById(R.id.guidVpview);
-        vpview.addOnPageChangeListener(this);
+        this.vpview.addOnPageChangeListener(this);
         this.findViewById(R.id.guidBtnOk).setOnClickListener(this.wrapperOnclickListener(x->this.guidBtnOkOnClick(x)));
     }
 
     @Override
     public void initData() throws Exception {
         ArrayList<ImageView> lstImgView=new ArrayList<ImageView>();
+
         ImageView view=new ImageView(this);
-        view.setBackgroundResource(R.drawable.guid001);
+        view.setScaleType(ImageView.ScaleType.FIT_XY);
+        Glide.with(this).load(R.drawable.guid001).into(view);
         lstImgView.add(view);
+
         view=new ImageView(this);
-        view.setBackgroundResource(R.drawable.guid002);
+        view.setScaleType(ImageView.ScaleType.FIT_XY);
+        Glide.with(this).load(R.drawable.guid002).into(view);
         lstImgView.add(view);
+
         view=new ImageView(this );
-        view.setBackgroundResource(R.drawable.guid003);
+        view.setScaleType(ImageView.ScaleType.FIT_XY);
+        Glide.with(this).load(R.drawable.guid003).into(view);
         lstImgView.add(view);
+
         BwPagerAdapter<ImageView> adapter=new BwPagerAdapter<>(this,lstImgView);
         adapter.instantiateItemHandler=(context,lst,position)->lst.get(position);
         this.vpview.setAdapter(adapter);
     }
+
+
 
     public void guidBtnOkOnClick(View view){
         SharedPreferences sp= this.getSharedPreferences(SpBucket.Index.Global,Context.MODE_PRIVATE);
