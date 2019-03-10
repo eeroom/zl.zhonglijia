@@ -24,6 +24,9 @@ public class API {
         public static String BassAdress="http://os.zhongliko.com/Kproject/WebService/KProjectWebService.asmx";
         public static class  Action{
             public static String getRankingsTop3 = "getRankingsTop3";//考勤前三排行
+            public static String GETTODAYOUTSIDEAPPLY = "GetTodayOutsideApply";//获取当天的外勤信息
+            public final static String GETFIRSTARRIVE = "getFirstArrive";//早到光荣榜
+            public final static String GETSCHEDULBYUSERID = "GetSchedulByUserID";//验证当天排班，打卡方式
         }
     }
 }

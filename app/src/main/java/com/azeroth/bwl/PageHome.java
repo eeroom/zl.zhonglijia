@@ -1,5 +1,6 @@
 package com.azeroth.bwl;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,11 +35,17 @@ public class PageHome extends Page {
     GridView gvMenu;
     public PageHome(BwActivity activity){
         super(activity,View.inflate(activity,R.layout.page_home,null));
-         this.gvMenu=(GridView)this.view.findViewById(R.id.gv_content);
     }
     @Override
     public void initView() throws Exception{
+        this.gvMenu=(GridView)this.view.findViewById(R.id.gv_content);
         //this.gvMenu.setOnItemClickListener(this::gvMenuOnItemClick);
+        //签到
+        this.view.findViewById(R.id.ll_qiandao).setOnClickListener(this.hostActivity.wrapperOnclickListener(x->{
+            Intent it=new Intent();
+            it.setClass(this.hostActivity,SignActivity.class);
+            this.hostActivity.startActivity(it);
+        }));
     }
     @Override
     public void initData() throws Exception {
