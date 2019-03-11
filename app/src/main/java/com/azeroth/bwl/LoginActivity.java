@@ -44,6 +44,8 @@ public class LoginActivity extends BwActivity {
 
 
     private void loginBtnOkOnClick(View view) throws Exception {
+        //BwApplication.appInstance.userInfo.CellPhoneNumber=((TextView) this.findViewById(R.id.loginTxtName)).getText().toString();
+        BwApplication.appInstance.userInfo.Id=((TextView) this.findViewById(R.id.loginTxtName)).getText().toString();
         BwApplication.appInstance.userInfo.CellPhoneNumber=((TextView) this.findViewById(R.id.loginTxtName)).getText().toString();
         this.redirectToHome("111");
         return;

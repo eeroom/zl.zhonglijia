@@ -3,6 +3,8 @@ package com.azeroth.bwl;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,10 +32,12 @@ import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SignActivity extends BwActivity {
-
+    String mLongitude="";
+    String mLatitude="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,9 @@ public class SignActivity extends BwActivity {
     @Override
     public void initView() throws Exception {
         setContentView(R.layout.activity_sign);
+        this.findViewById(R.id.tv_signin).setOnClickListener(this.wrapperOnclickListener(this::signTvSignInOnClick));
+        this.findViewById(R.id.tv_signout).setOnClickListener(this.wrapperOnclickListener(this::signTvSignOutOnClick));
+
     }
 
     @Override
@@ -62,15 +69,98 @@ public class SignActivity extends BwActivity {
         messageDaka.parameter.put("longitude", "111");//这个参数没用了
         messageDaka.parameter.put("latitude", "222");//这个参数没用了
         this.SendSoapRequest(messageDaka,this::dakaHandler);
+        refreshGPSInfo();
+    }
+
+    void signTvSignOutOnClick(View view) throws  Exception{
+        TextView tv_signintime= ((TextView)this.findViewById(R.id.tv_signintime));
+        if(tv_signintime.getTag()==null){
+            Toast.makeText(this,"还没有签到",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String signdataId=(String) tv_signintime.getTag();
+
+        view.setEnabled(false);
+        WifiManager mWifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        String routerMac="f0:3e:90:0e:5c:78";
+        if (mWifi.isWifiEnabled()) {
+            WifiInfo wifiInfo = mWifi.getConnectionInfo();
+            routerMac = wifiInfo.getBSSID();//获取被连接网络的mac地址  
+        }
+        SoapRequestMessage message=new SoapRequestMessage(API.KQ.BassAdress);
+        message.action=API.KQ.Action.signOut_WiFi;
+
+        message.parameter.put("SignDataID", signdataId);
+        message.parameter.put("AttendLocationID", "WIFI打卡");
+        message.parameter.put("longitude", this.mLongitude);
+        message.parameter.put("latitude", this.mLatitude);
+        message.parameter.put("Mac", routerMac);
+
+        this.SendSoapRequest(message,(resultWrapper,value)->{
+            view.setEnabled(true);
+            JSONArray obj_json1 = new JSONArray(resultWrapper);
+            String resultStr = obj_json1.getJSONObject(0).getString("result");
+            if(!"1".equals(resultStr)){
+                Toast.makeText(this,value,Toast.LENGTH_SHORT).show();
+                return;
+            }
+            JSONArray array = new JSONArray(value);
+            JSONArray array1 = array.getJSONObject(0).getJSONArray("content");
+            String time = array1.getJSONObject(0).getString("SignOutTime");
+            String signintime = time.substring(time.indexOf(" "), time.length());
+            TextView tv_signouttime= ((TextView)this.findViewById(R.id.tv_signouttime));
+            tv_signouttime.setText(signintime);
+            Toast.makeText(this,"签退成功",Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    void signTvSignInOnClick(View view) throws  Exception{
+        view.setEnabled(false);
+        String routerMac="f0:3e:90:0e:5c:78";
+        WifiManager mWifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (mWifi.isWifiEnabled()) {
+            WifiInfo wifiInfo = mWifi.getConnectionInfo();
+            routerMac = wifiInfo.getBSSID();//获取被连接网络的mac地址  
+        }
+        SoapRequestMessage message=new SoapRequestMessage(API.KQ.BassAdress);
+        message.action=API.KQ.Action.signIn_WiFi;
+        message.parameter.put("UserID", BwApplication.appInstance.userInfo.Id);
+        message.parameter.put("AttendLocationID", "WIFI打卡");//这个没用
+        message.parameter.put("longitude", this.mLongitude);
+        message.parameter.put("latitude", this.mLatitude);
+        message.parameter.put("Mac", routerMac);
+        this.SendSoapRequest(message,(resultWrapper,value)->{
+            view.setEnabled(true);
+            JSONArray obj_json1 = new JSONArray(resultWrapper);
+            String resultStr = obj_json1.getJSONObject(0).getString("result");
+            if(!"1".equals(resultStr)){
+                Toast.makeText(this,value,Toast.LENGTH_SHORT).show();
+                return;
+            }
+            JSONArray array = new JSONArray(value);
+            JSONArray array1 = array.getJSONObject(0).getJSONArray("content");
+            String id = array1.getJSONObject(0).getString("ID");
+            String time = array1.getJSONObject(0).getString("SignInTiem");
+            String signintime = time.substring(time.indexOf(" "), time.length());
+            TextView tv_signintime= ((TextView)this.findViewById(R.id.tv_signintime));
+            tv_signintime.setText(signintime);
+            tv_signintime.setTag(id);
+            Toast.makeText(this,"签到成功",Toast.LENGTH_SHORT).show();
+        });
     }
 
     void dakaHandler(String result,String json2) throws Exception {
+        JSONArray obj_json1 = new JSONArray(result);
+        String resultStr = obj_json1.getJSONObject(0).getString("result");
+        if(!"20".equals(resultStr))
+            return;
         JSONArray array = new JSONArray(json2);
         JSONArray array1 = array.getJSONObject(0).getJSONArray("content");
         String SignType = array1.getJSONObject(0).getString("SignType");
-        String id = array1.getJSONObject(0).getString("ID");
+        String signdataId = array1.getJSONObject(0).getString("ID");
         String AttendLocationID = array1.getJSONObject(0).getString("AttendLocationID");
         TextView tv_signintime= (TextView)this.findViewById(R.id.tv_signintime);
+        tv_signintime.setTag(signdataId);//签到记录的Id
         if (array1.getJSONObject(0).getString("SignInTiem").equals("")) {
             tv_signintime.setText("");
         } else {
@@ -88,12 +178,8 @@ public class SignActivity extends BwActivity {
         }
     }
 
-    void initDaka() throws Exception {
-        boolean initdaka=false;
+    void refreshGPSInfo() throws Exception {
         LocationClient mLocationClient=new LocationClient(this);
-        BwLocationListener locationListener=new BwLocationListener();
-        locationListener.handlerReceiveLocation=this::initDaka;
-        mLocationClient.registerLocationListener(locationListener);
         LocationClientOption option = new LocationClientOption();
 
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -139,30 +225,15 @@ public class SignActivity extends BwActivity {
 //mLocationClient为第二步初始化过的LocationClient对象
 //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
 //更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
+
+        BwLocationListener locationListener=new BwLocationListener();
+        locationListener.handlerReceiveLocation=(locationInfo,ticks)->{
+            this.mLatitude = locationInfo.getLatitude()+"";    //获取纬度信息
+            this.mLongitude = locationInfo.getLongitude()+"";
+        };
+        mLocationClient.registerLocationListener(locationListener);
         mLocationClient.start();
     }
-
-    void initDaka(BDLocation location, Integer tickTimes)  {
-        if(tickTimes>1)
-            return;
-        double latitude = location.getLatitude();    //获取纬度信息
-        Toast.makeText(SignActivity.this,String.valueOf(latitude),Toast.LENGTH_LONG).show();
-        double longitude = location.getLongitude();    //获取经度信息
-        Toast.makeText(SignActivity.this,String.valueOf(longitude),Toast.LENGTH_LONG).show();
-        float radius = location.getRadius();    //获取定位精度，默认值为0.0f
-        String coorType = location.getCoorType();
-        //获取经纬度坐标类型，以LocationClientOption中设置过的坐标类型为准
-        int errorCode = location.getLocType();
-        //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
-        SoapRequestMessage messageDaka=new SoapRequestMessage(API.KQ.BassAdress);
-        messageDaka.action=API.KQ.Action.GETSCHEDULBYUSERID;
-        messageDaka.parameter.put("UserID", BwApplication.appInstance.userInfo.Id);
-        messageDaka.parameter.put("longitude", longitude+"");
-        messageDaka.parameter.put("latitude", latitude+"");
-        this.wrapperRunnable(()->this.SendSoapRequest(messageDaka,this::dakaHandler)).run();
-    }
-
-
 
     void  firstArriveHandler(String result,String json2) throws  Exception{
         JSONObject jsonObject = new JSONArray(json2).getJSONObject(0).getJSONArray("content").getJSONObject(0);

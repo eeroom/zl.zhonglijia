@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入手机号码"
-            android:text="111"
+            android:text="159"
             android:inputType="number" />
     </RelativeLayout>
     <RelativeLayout

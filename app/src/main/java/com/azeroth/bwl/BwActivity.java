@@ -42,9 +42,8 @@ public abstract class BwActivity extends Activity
             this.initData();
         }catch (Exception ex){
             String msg=ex.getMessage();
-            if(msg.isEmpty())
-                msg=ex.getClass().getName();
-            Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+            String msg2=ex.getClass().getName();
+            Toast.makeText(this,msg!=null?msg:msg2,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -58,10 +57,8 @@ public abstract class BwActivity extends Activity
               fn.invoke(x);
           }catch (Exception ex){
               String msg=ex.getMessage();
-              if(msg==null ||msg.isEmpty())
-                  msg=ex.getClass().getName();
-              final  String msgtmp=msg;
-              this.handler.post(()->Toast.makeText(this,msgtmp,Toast.LENGTH_SHORT).show());
+              String msg2=ex.getClass().getName();
+              this.handler.post(()->Toast.makeText(this,msg!=null?msg:msg2,Toast.LENGTH_SHORT).show());
           }
         };
     }
@@ -72,10 +69,8 @@ public abstract class BwActivity extends Activity
                 fn.Run();
             }catch (Exception ex){
                 String msg=ex.getMessage();
-                if(msg==null ||msg.isEmpty())
-                    msg=ex.getClass().getName();
-                final  String msgtmp=msg;
-                this.handler.post(()->Toast.makeText(this,msgtmp,Toast.LENGTH_SHORT).show());
+                String msg2=ex.getClass().getName();
+                this.handler.post(()->Toast.makeText(this,msg!=null?msg:msg2,Toast.LENGTH_SHORT).show());
             }
         };
     }

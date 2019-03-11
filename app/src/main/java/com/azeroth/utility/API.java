@@ -27,6 +27,9 @@ public class API {
             public static String GETTODAYOUTSIDEAPPLY = "GetTodayOutsideApply";//获取当天的外勤信息
             public final static String GETFIRSTARRIVE = "getFirstArrive";//早到光荣榜
             public final static String GETSCHEDULBYUSERID = "GetSchedulByUserID";//验证当天排班，打卡方式
+            public final static String SIGNIN = "signIn";//用户签到
+            public final static String signIn_WiFi = "signIn_WiFi";//用户WIFI签到
+            public final static String signOut_WiFi = "signOut_WiFi";//用户WIFI签退
         }
     }
 }

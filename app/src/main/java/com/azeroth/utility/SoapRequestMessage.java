@@ -8,7 +8,7 @@ public class SoapRequestMessage {
     public String url;
     public HashMap<String, String> parameter=new HashMap<String, String>();
     public String responseCharsetName="UTF-8";
-    public Integer requestTimeout=3000;
+    public Integer requestTimeout=30000;
     public String namesp= "http://tempuri.org/";
     public String action;
     public int soapVersion=SoapEnvelope.VER11;
