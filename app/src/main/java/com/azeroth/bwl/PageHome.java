@@ -87,14 +87,13 @@ public class PageHome extends Page {
         kechengMessage.parameter.put("Time",new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         this.hostActivity.SendSoapRequest(kechengMessage,this::handlerKecheng);
     }
+
     void  gvMenuOnItemClick(AdapterView<?> parent, View view, int position, long id){
         UserAllBean.PrivilegeBean model= (UserAllBean.PrivilegeBean)view.getTag();
         Toast.makeText(this.hostActivity,com.alibaba.fastjson.JSON.toJSONString(model),Toast.LENGTH_SHORT).show();
     }
-    void handlerKecheng(SoapObject result){
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERP.Action.GETCOMPANYTRIPOFFULLPICTURE + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+
+    void handlerKecheng(String result,String json2){
         ArrayList<CompanyDateTripBean> lstKecheng = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<CompanyDateTripBean>>() {});
         BwListAdapter<CompanyDateTripBean> adapter=new BwListAdapter<>(this.hostActivity,lstKecheng);
         adapter.createViewHandler=this::createKechengItemView;
@@ -112,10 +111,7 @@ public class PageHome extends Page {
     }
 
 
-    void handlerMenu(SoapObject result) throws Exception{
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERP.Action.GetUserHomeMenu + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+    void handlerMenu(String result,String json2) throws Exception{
         String userSelect = new JSONObject(json2).optString("UserSelect");
         String UserAll = new JSONObject(json2).optString("UserAll");
         ArrayList<UserAllBean> lstMenu = com.alibaba.fastjson.JSON.parseObject(userSelect,  new TypeReference<ArrayList<UserAllBean>>() {});
@@ -137,10 +133,7 @@ public class PageHome extends Page {
         return view;
     }
 
-    void handlerKqTopSignout(SoapObject result){
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.KQ.Action.getRankingsTop3 + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+    void handlerKqTopSignout(String result,String json2){
         ArrayList<QianDaoBean> qianDaoBeen = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<QianDaoBean>>() {});
         //this.view.findViewById(R.id.ll_no_late).setVisibility(View.VISIBLE);
         Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(0).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_go_first));
@@ -156,10 +149,7 @@ public class PageHome extends Page {
         ((TextView)view.findViewById(R.id.tv_go_time3)).setText(qianDaoBeen.get(0).getContent().get(2).getSignInTiem());
     }
 
-    void handlerKqTopSignin(SoapObject result){
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.KQ.Action.getRankingsTop3 + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+    void handlerKqTopSignin(String result,String json2){
         ArrayList<QianDaoBean> qianDaoBeen = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<QianDaoBean>>() {});
         //this.view.findViewById(R.id.ll_no_first).setVisibility(View.VISIBLE);
         Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(0).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_come_first));
@@ -175,10 +165,7 @@ public class PageHome extends Page {
         ((TextView)view.findViewById(R.id.tv_time3)).setText(qianDaoBeen.get(0).getContent().get(2).getSignInTiem());
     }
 
-    void handlerTipInfo(SoapObject result){
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERP.Action.JPushGetJMessageLogIndex + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+    void handlerTipInfo(String result,String json2){
         ArrayList<JMessageBean> lstRT=
                 com.alibaba.fastjson.JSON.parseObject(json2,new TypeReference<ArrayList<JMessageBean>>() {});
         BwListAdapter<JMessageBean> adapter=new BwListAdapter<>(this.hostActivity,lstRT);
@@ -186,6 +173,8 @@ public class PageHome extends Page {
         ListView lvTip= (ListView)this.view.findViewById(R.id.home_lv_tip);
         lvTip.setAdapter(adapter);
     }
+
+
 
     View createTipItemView(BwActivity context, List<JMessageBean> lstValue, int position, Object tag){
         View view=View.inflate(context,R.layout.page_home_tip_item,null);
@@ -199,10 +188,7 @@ public class PageHome extends Page {
         return view;
     }
 
-    void handlerTaskInfo(SoapObject result){
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERPTask.Action.getMyTaskListForApp + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+    void handlerTaskInfo(String result,String json2){
         ArrayList<TaskListBean> lstRT=
                 com.alibaba.fastjson.JSON.parseObject(json2,new TypeReference<ArrayList<TaskListBean>>() {});
         TaskListBean taskWrapper=lstRT.get(0);

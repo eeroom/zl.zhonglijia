@@ -73,20 +73,14 @@ public class LoginActivity extends BwActivity {
         message.parameter.put("password", ((TextView) this.findViewById(R.id.loginTxtPassword)).getText().toString());
         message.action = "USERLOGIN";
 
-        this.SendSoapRequest(message, result -> {
-
-            SoapObject provinceSoapObject = (SoapObject) result.getProperty(message.action + "Result");
-            String json = provinceSoapObject.getProperty(0).toString();
-            String json2 = provinceSoapObject.getProperty(1).toString();
-            org.json.JSONArray obj_json1 = new org.json.JSONArray(json);
-            String str = obj_json1.getJSONObject(0).getString("result");
-            if (!str.equals("0"))
-                throw new RuntimeException(json2);
+        this.SendSoapRequest(message, (result,value) -> {
+            if (!result.equals("0"))
+                throw new RuntimeException(value);
             SharedPreferences sp = this.getSharedPreferences(SpBucket.Index.Login, MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
-            editor.putString(SpBucket.Item.UserInfo, json2);
+            editor.putString(SpBucket.Item.UserInfo, value);
             editor.commit();
-            this.redirectToHome(json2);
+            this.redirectToHome(value);
         });
     }
 

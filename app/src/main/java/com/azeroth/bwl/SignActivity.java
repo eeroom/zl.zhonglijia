@@ -56,8 +56,36 @@ public class SignActivity extends BwActivity {
         messageFirstArrive.action=API.KQ.Action.GETFIRSTARRIVE;
         this.SendSoapRequest(messageFirstArrive,this::firstArriveHandler);
         //获取打卡信息
-        initDaka();
+        SoapRequestMessage messageDaka=new SoapRequestMessage(API.KQ.BassAdress);
+        messageDaka.action=API.KQ.Action.GETSCHEDULBYUSERID;
+        messageDaka.parameter.put("UserID", BwApplication.appInstance.userInfo.Id);
+        messageDaka.parameter.put("longitude", "111");//这个参数没用了
+        messageDaka.parameter.put("latitude", "222");//这个参数没用了
+        this.SendSoapRequest(messageDaka,this::dakaHandler);
+    }
 
+    void dakaHandler(String result,String json2) throws Exception {
+        JSONArray array = new JSONArray(json2);
+        JSONArray array1 = array.getJSONObject(0).getJSONArray("content");
+        String SignType = array1.getJSONObject(0).getString("SignType");
+        String id = array1.getJSONObject(0).getString("ID");
+        String AttendLocationID = array1.getJSONObject(0).getString("AttendLocationID");
+        TextView tv_signintime= (TextView)this.findViewById(R.id.tv_signintime);
+        if (array1.getJSONObject(0).getString("SignInTiem").equals("")) {
+            tv_signintime.setText("");
+        } else {
+            String time = array1.getJSONObject(0).getString("SignInTiem");
+            String signintime = time.substring(time.indexOf(" "), time.length());
+            tv_signintime.setText(signintime);
+        }
+        TextView tv_signouttime= (TextView)this.findViewById(R.id.tv_signouttime);
+        if (array1.getJSONObject(0).getString("SignOutTime").equals("")) {
+            tv_signouttime.setText("");
+        } else {
+            String time = array1.getJSONObject(0).getString("SignOutTime");
+            String signouttime = time.substring(time.indexOf(" "), time.length());
+            tv_signouttime.setText(signouttime);
+        }
     }
 
     void initDaka() throws Exception {
@@ -134,38 +162,9 @@ public class SignActivity extends BwActivity {
         this.wrapperRunnable(()->this.SendSoapRequest(messageDaka,this::dakaHandler)).run();
     }
 
-    void dakaHandler(SoapObject result) throws Exception {
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.KQ.Action.GETFIRSTARRIVE + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
 
-        JSONArray array = new JSONArray(json2);
-        JSONArray array1 = array.getJSONObject(0).getJSONArray("content");
-        String SignType = array1.getJSONObject(0).getString("SignType");
-        String id = array1.getJSONObject(0).getString("ID");
-        String AttendLocationID = array1.getJSONObject(0).getString("AttendLocationID");
-        TextView tv_signintime= (TextView)this.findViewById(R.id.tv_signintime);
-        if (array1.getJSONObject(0).getString("SignInTiem").equals("")) {
-            tv_signintime.setText("");
-        } else {
-            String time = array1.getJSONObject(0).getString("SignInTiem");
-            String signintime = time.substring(time.indexOf(" "), time.length());
-            tv_signintime.setText(signintime);
-        }
-        TextView tv_signouttime= (TextView)this.findViewById(R.id.tv_signouttime);
-        if (array1.getJSONObject(0).getString("SignOutTime").equals("")) {
-            tv_signouttime.setText("");
-        } else {
-            String time = array1.getJSONObject(0).getString("SignOutTime");
-            String signouttime = time.substring(time.indexOf(" "), time.length());
-            tv_signouttime.setText(signouttime);
-        }
-    }
 
-    void  firstArriveHandler(SoapObject result) throws  Exception{
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.KQ.Action.GETFIRSTARRIVE + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+    void  firstArriveHandler(String result,String json2) throws  Exception{
         JSONObject jsonObject = new JSONArray(json2).getJSONObject(0).getJSONArray("content").getJSONObject(0);
         ImageView iv_head=this.findViewById(R.id.iv_head);
         Glide.with(this).load(jsonObject.getString("headimage")).into(iv_head);
@@ -179,10 +178,7 @@ public class SignActivity extends BwActivity {
         tv_time2.setVisibility(View.VISIBLE);
     }
 
-    void  outWorkHandler(SoapObject result) throws JSONException {
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.KQ.Action.GETTODAYOUTSIDEAPPLY + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+    void  outWorkHandler(String result,String json2) throws JSONException {
         String rt = new JSONArray(json2).getJSONObject(0).getJSONArray("content").toString();
         ArrayList<OutWorkBean> lstOutWork = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<OutWorkBean>>() {});
         BwListAdapter<OutWorkBean> adapter=new BwListAdapter<>(this,lstOutWork);

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.azeroth.utility.FunctionWrapper;
 import com.azeroth.utility.RunnableWithException;
 
+import org.json.JSONArray;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
@@ -147,7 +148,7 @@ public abstract class BwActivity extends Activity
         })).start();
     }
 
-    public void SendSoapRequest(SoapRequestMessage message, FunctionWrapper<SoapObject> fn)throws  Exception{
+    public void SendSoapRequest(SoapRequestMessage message, Action2ThrowException<String,String> fn)throws  Exception{
         new Thread(this.wrapperRunnable(()->{
             // 创建SoapObject对象
             SoapObject requestParameter = new SoapObject(message.namesp, message.action);
@@ -167,13 +168,18 @@ public abstract class BwActivity extends Activity
             httpTransportSE.call(message.namesp + message.action, soapEnvelope);
             soapEnvelope.getResponse();
             SoapObject responseValue=(SoapObject) soapEnvelope.bodyIn;
-            this.handler.post(this.wrapperRunnable(()->fn.invoke(responseValue)));
+            responseValue = (SoapObject) responseValue.getProperty(message.action + "Result");
+            String json1 = responseValue.getProperty(0).toString();
+            String json2 = responseValue.getProperty(1).toString();
+//            JSONArray obj_json1 = new JSONArray(json1);
+//            String resultStr = obj_json1.getJSONObject(0).getString("result");
+//            String codeStr=obj_json1.getJSONObject(0).getString("Code");
+            this.handler.post(this.wrapperRunnable(()->fn.run(json1,json2)));
         })).start();
     }
 
     public int dip2px(Context context, float dipValue){
         Resources r = context.getResources();
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, dipValue, r.getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, r.getDisplayMetrics());
     }
 }

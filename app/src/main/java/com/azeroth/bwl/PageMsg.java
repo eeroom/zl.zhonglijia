@@ -49,10 +49,7 @@ public class PageMsg extends Page {
         this.hostActivity.SendSoapRequest(message,this::initListView);
     }
 
-    public void initListView(SoapObject result){
-        SoapObject provinceSoapObject = (SoapObject) result.getProperty(API.ERP.Action.JPushGetJMessageTypeV2 + "Result");
-        String json = provinceSoapObject.getProperty(0).toString();
-        String json2 = provinceSoapObject.getProperty(1).toString();
+    public void initListView(String result,String json2){
         ArrayList<JpushNoticeTypeBean> lstNotice=
                 com.alibaba.fastjson.JSON.parseObject(json2,new TypeReference<ArrayList<JpushNoticeTypeBean>>() {});
         BwListAdapter<JpushNoticeTypeBean> adapter= new BwListAdapter(this.hostActivity,lstNotice);
