@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
@@ -16,6 +17,8 @@ import com.azeroth.view.ViewPagerNoScroll;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends BwActivity  {
 
@@ -27,6 +30,7 @@ public class MainActivity extends BwActivity  {
         setContentView(R.layout.activity_main);
         ((RadioGroup)this.findViewById(R.id.mainRadioGroup)).setOnCheckedChangeListener(this::radioGroupOnCheckedChange);
         this.viewPager=(ViewPagerNoScroll)this.findViewById(R.id.mainViewPage);
+        this.initData();
     }
     @Override
     public void initData() throws Exception {
@@ -46,29 +50,39 @@ public class MainActivity extends BwActivity  {
         this.viewPager.setAdapter(adapter);
     }
 
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-        Intent home = new Intent(Intent.ACTION_MAIN);
-        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        home.addCategory(Intent.CATEGORY_HOME);
-        startActivity(home);
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//        //super.onBackPressed();
+//        Intent home = new Intent(Intent.ACTION_MAIN);
+//        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        home.addCategory(Intent.CATEGORY_HOME);
+//        startActivity(home);
+//
+//    }
 
     public void radioGroupOnCheckedChange(RadioGroup group, int checkedId)
     {
         this.viewPager.setCurrentItem(this.dictRadioAndVpIndex.get(checkedId));
     }
 
-    public  void btnQuitOnclick(View view){
-        SharedPreferences sp= this.getSharedPreferences(SpBucket.Index.Login,MODE_PRIVATE);
-        SharedPreferences.Editor editor= sp.edit();
-        editor.remove(SpBucket.Item.UserInfo);
-        editor.commit();
-        Intent it=new Intent();
-        it.setClass(this,LoginActivity.class);
-        this.startActivity(it);
-        this.finish();
+
+    private int isExit = 0;
+    Timer mTimer;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode != KeyEvent.KEYCODE_BACK || event.getAction() != KeyEvent.ACTION_DOWN)
+           return  false;
+        if(isExit>0)
+            System.exit(0);
+        isExit++;
+        Toast.makeText(this, "再点一下退出", Toast.LENGTH_SHORT).show();
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isExit = 0;
+            }
+        }, 1000);
+        return false;
     }
 }

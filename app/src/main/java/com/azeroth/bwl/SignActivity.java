@@ -20,6 +20,7 @@ import com.azeroth.model.CompanyDateTripBean;
 import com.azeroth.model.OutWorkBean;
 import com.azeroth.utility.API;
 import com.azeroth.utility.BwLocationListener;
+import com.azeroth.utility.GlideCircleTransform;
 import com.azeroth.utility.SoapRequestMessage;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
@@ -43,12 +44,14 @@ public class SignActivity extends BwActivity {
         super.onCreate(savedInstanceState);
 
     }
+
+
     @Override
     public void initView() throws Exception {
         setContentView(R.layout.activity_sign);
         this.findViewById(R.id.tv_signin).setOnClickListener(this.wrapperOnclickListener(this::signTvSignInOnClick));
         this.findViewById(R.id.tv_signout).setOnClickListener(this.wrapperOnclickListener(this::signTvSignOutOnClick));
-
+        this.initData();
     }
 
     @Override
@@ -56,7 +59,7 @@ public class SignActivity extends BwActivity {
         //外勤列表
         SoapRequestMessage message=new SoapRequestMessage(API.KQ.BassAdress);
         message.action=API.KQ.Action.GETTODAYOUTSIDEAPPLY;
-        message.parameter.put("UserID",BwApplication.appInstance.userInfo.Id);
+        message.parameter.put("UserID",BwApplication.appInstance.userInfo.PhoneNumber);
         this.SendSoapRequest(message,this::outWorkHandler);
         //最早到的人
         SoapRequestMessage messageFirstArrive=new SoapRequestMessage(API.KQ.BassAdress);
@@ -65,7 +68,7 @@ public class SignActivity extends BwActivity {
         //获取打卡信息
         SoapRequestMessage messageDaka=new SoapRequestMessage(API.KQ.BassAdress);
         messageDaka.action=API.KQ.Action.GETSCHEDULBYUSERID;
-        messageDaka.parameter.put("UserID", BwApplication.appInstance.userInfo.Id);
+        messageDaka.parameter.put("UserID", BwApplication.appInstance.userInfo.PhoneNumber);
         messageDaka.parameter.put("longitude", "111");//这个参数没用了
         messageDaka.parameter.put("latitude", "222");//这个参数没用了
         this.SendSoapRequest(messageDaka,this::dakaHandler);
@@ -124,7 +127,7 @@ public class SignActivity extends BwActivity {
         }
         SoapRequestMessage message=new SoapRequestMessage(API.KQ.BassAdress);
         message.action=API.KQ.Action.signIn_WiFi;
-        message.parameter.put("UserID", BwApplication.appInstance.userInfo.Id);
+        message.parameter.put("UserID", BwApplication.appInstance.userInfo.PhoneNumber);
         message.parameter.put("AttendLocationID", "WIFI打卡");//这个没用
         message.parameter.put("longitude", this.mLongitude);
         message.parameter.put("latitude", this.mLatitude);
@@ -238,7 +241,8 @@ public class SignActivity extends BwActivity {
     void  firstArriveHandler(String result,String json2) throws  Exception{
         JSONObject jsonObject = new JSONArray(json2).getJSONObject(0).getJSONArray("content").getJSONObject(0);
         ImageView iv_head=this.findViewById(R.id.iv_head);
-        Glide.with(this).load(jsonObject.getString("headimage")).into(iv_head);
+        Glide.with(this).load(jsonObject.getString("headimage"))
+                .transform(new GlideCircleTransform(this)).into(iv_head);
         TextView tv_name=this.findViewById(R.id.tv_name);
         tv_name.setText(jsonObject.getString("TrueName"));
         TextView tv_time=this.findViewById(R.id.tv_time);
@@ -250,8 +254,11 @@ public class SignActivity extends BwActivity {
     }
 
     void  outWorkHandler(String result,String json2) throws JSONException {
-        String rt = new JSONArray(json2).getJSONObject(0).getJSONArray("content").toString();
-        ArrayList<OutWorkBean> lstOutWork = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<OutWorkBean>>() {});
+        String resultStr = new JSONArray(result).getJSONObject(0).getString("result");
+        if(!"1".equals(resultStr))
+            return;
+        String jsonrt = new JSONArray(json2).getJSONObject(0).getJSONArray("content").toString();
+        ArrayList<OutWorkBean> lstOutWork = com.alibaba.fastjson.JSON.parseObject(jsonrt,  new TypeReference<ArrayList<OutWorkBean>>() {});
         BwListAdapter<OutWorkBean> adapter=new BwListAdapter<>(this,lstOutWork);
         adapter.createViewHandler=this::createOutworkItem;
         ListView lv= (ListView)this.findViewById(R.id.outwork_listview);

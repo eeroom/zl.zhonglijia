@@ -31,10 +31,18 @@ public class GuidActivity extends BwActivity implements ViewPager.OnPageChangeLi
 
     @Override
     public void initView() throws Exception {
+        SharedPreferences sp = this.getSharedPreferences(SpBucket.Index.Global, MODE_PRIVATE);
+        Integer guided= sp.getInt(SpBucket.Item.Guided, -1);
+        if(guided>0){
+            this.redirectToLogin();
+            return;
+        }
         setContentView(R.layout.activity_guid);
         this.vpview= (ViewPager)this.findViewById(R.id.guidVpview);
         this.vpview.addOnPageChangeListener(this);
         this.findViewById(R.id.guidBtnOk).setOnClickListener(this.wrapperOnclickListener(x->this.guidBtnOkOnClick(x)));
+
+        this.initData();
     }
 
     @Override
@@ -66,7 +74,12 @@ public class GuidActivity extends BwActivity implements ViewPager.OnPageChangeLi
     public void guidBtnOkOnClick(View view){
         SharedPreferences sp= this.getSharedPreferences(SpBucket.Index.Global,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor= sp.edit();
-        editor.putBoolean(SpBucket.Item.Guided,true);
+        editor.putInt(SpBucket.Item.Guided,1);
+        editor.commit();
+       this.redirectToLogin();
+    }
+
+    void redirectToLogin(){
         Intent it=new Intent();
         it.setClass(this,LoginActivity.class);
         this.startActivity(it);

@@ -20,9 +20,12 @@ import com.azeroth.model.QianDaoBean;
 import com.azeroth.model.TaskListBean;
 import com.azeroth.model.UserAllBean;
 import com.azeroth.utility.API;
+import com.azeroth.utility.GlideCircleTransform;
 import com.azeroth.utility.SoapRequestMessage;
 import com.bumptech.glide.Glide;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
@@ -56,12 +59,12 @@ public class PageHome extends Page {
         //获取任务
         SoapRequestMessage message=new SoapRequestMessage(API.ERPTask.BassAdress);
         message.action=API.ERPTask.Action.getMyTaskListForApp;
-        message.parameter.put("UR_TR_UNION_ID",BwApplication.appInstance.userInfo.Tid);
+        message.parameter.put("UR_TR_UNION_ID",BwApplication.appInstance.userInfo.TR_UNION_ID);
         this.hostActivity.SendSoapRequest(message,this::handlerTaskInfo);
         //获取最新提醒
         SoapRequestMessage tipMessage=new SoapRequestMessage(API.ERP.BassAdrees);
         tipMessage.action=API.ERP.Action.JPushGetJMessageLogIndex;
-        tipMessage.parameter.put("UnionID",BwApplication.appInstance.userInfo.Tid);
+        tipMessage.parameter.put("UnionID",BwApplication.appInstance.userInfo.TR_UNION_ID);
         tipMessage.parameter.put("AppType","2");
         this.hostActivity.SendSoapRequest(tipMessage,this::handlerTipInfo);
         //签到前三
@@ -79,7 +82,7 @@ public class PageHome extends Page {
         SoapRequestMessage menuMessage=new SoapRequestMessage(API.ERP.BassAdrees);
         menuMessage.action=API.ERP.Action.GetUserHomeMenu;
         //map.put("UNION_ID", UNION_ID);//评论对象的ID
-        menuMessage.parameter.put("UNION_ID",BwApplication.appInstance.userInfo.Tid);
+        menuMessage.parameter.put("UNION_ID",BwApplication.appInstance.userInfo.TR_UNION_ID);
         this.hostActivity.SendSoapRequest(menuMessage,this::handlerMenu);
         //当月课程安排
         SoapRequestMessage kechengMessage=new SoapRequestMessage(API.ERP.BassAdrees);
@@ -133,34 +136,40 @@ public class PageHome extends Page {
         return view;
     }
 
-    void handlerKqTopSignout(String result,String json2){
+    void handlerKqTopSignout(String result,String json2) throws JSONException {
+        String resultStr = new JSONArray(result).getJSONObject(0).getString("result");
+        if(!"1".equals(resultStr))
+            return;
         ArrayList<QianDaoBean> qianDaoBeen = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<QianDaoBean>>() {});
         //this.view.findViewById(R.id.ll_no_late).setVisibility(View.VISIBLE);
-        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(0).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_go_first));
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(0).getHeadimage()).transform(new GlideCircleTransform(this.hostActivity)).into((ImageView)view.findViewById(R.id.iv_go_first));
         ((TextView)view.findViewById(R.id.tv_name_go_first)).setText(qianDaoBeen.get(0).getContent().get(0).getTrueName());
         ((TextView)view.findViewById(R.id.tv_go_time1)).setText(qianDaoBeen.get(0).getContent().get(0).getSignInTiem());
 
-        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(1).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_go_second));
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(1).getHeadimage()).transform(new GlideCircleTransform(this.hostActivity)).into((ImageView)view.findViewById(R.id.iv_go_second));
         ((TextView)view.findViewById(R.id.tv_name_go_second)).setText(qianDaoBeen.get(0).getContent().get(1).getTrueName());
         ((TextView)view.findViewById(R.id.tv_go_time2)).setText(qianDaoBeen.get(0).getContent().get(1).getSignInTiem());
 
-        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(2).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_go_third));
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(2).getHeadimage()).transform(new GlideCircleTransform(this.hostActivity)).into((ImageView)view.findViewById(R.id.iv_go_third));
         ((TextView)view.findViewById(R.id.tv_name_go_third)).setText(qianDaoBeen.get(0).getContent().get(2).getTrueName());
         ((TextView)view.findViewById(R.id.tv_go_time3)).setText(qianDaoBeen.get(0).getContent().get(2).getSignInTiem());
     }
 
-    void handlerKqTopSignin(String result,String json2){
+    void handlerKqTopSignin(String result,String json2) throws  Exception{
+        String resultStr = new JSONArray(result).getJSONObject(0).getString("result");
+        if(!"1".equals(resultStr))
+            return;
         ArrayList<QianDaoBean> qianDaoBeen = com.alibaba.fastjson.JSON.parseObject(json2,  new TypeReference<ArrayList<QianDaoBean>>() {});
         //this.view.findViewById(R.id.ll_no_first).setVisibility(View.VISIBLE);
-        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(0).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_come_first));
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(0).getHeadimage()).transform(new GlideCircleTransform(this.hostActivity)).into((ImageView)view.findViewById(R.id.iv_come_first));
         ((TextView)view.findViewById(R.id.tv_name_come_first)).setText(qianDaoBeen.get(0).getContent().get(0).getTrueName());
         ((TextView)view.findViewById(R.id.tv_time1)).setText(qianDaoBeen.get(0).getContent().get(0).getSignInTiem());
 
-        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(1).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_come_second));
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(1).getHeadimage()).transform(new GlideCircleTransform(this.hostActivity)).into((ImageView)view.findViewById(R.id.iv_come_second));
         ((TextView)view.findViewById(R.id.tv_name_come_second)).setText(qianDaoBeen.get(0).getContent().get(1).getTrueName());
         ((TextView)view.findViewById(R.id.tv_time2)).setText(qianDaoBeen.get(0).getContent().get(1).getSignInTiem());
 
-        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(2).getHeadimage()).into((ImageView)view.findViewById(R.id.iv_come_third));
+        Glide.with(this.hostActivity).load(qianDaoBeen.get(0).getContent().get(2).getHeadimage()).transform(new GlideCircleTransform(this.hostActivity)).into((ImageView)view.findViewById(R.id.iv_come_third));
         ((TextView)view.findViewById(R.id.tv_name_come_third)).setText(qianDaoBeen.get(0).getContent().get(2).getTrueName());
         ((TextView)view.findViewById(R.id.tv_time3)).setText(qianDaoBeen.get(0).getContent().get(2).getSignInTiem());
     }
@@ -184,7 +193,7 @@ public class PageHome extends Page {
         JMessageBean model=lstValue.get(position);
         tvTitle.setText(model.getTitle());
         tvDate.setText(model.getNewTime());
-        Glide.with(this.hostActivity).load(model.getHeadImg()).into(ivIcon);
+        Glide.with(this.hostActivity).load(model.getHeadImg()).transform(new GlideCircleTransform(this.hostActivity)).into(ivIcon);
         return view;
     }
 

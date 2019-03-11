@@ -4,6 +4,7 @@ public class API {
     public static class ERP{
         public static String BassAdrees="https://api.zhongliko.com/webservice/erp_webservice.asmx";
         public static class  Action{
+            public final static String USERLOGIN = "UserLogin";//用户登录
             public static String JPushGetJMessageTypeV2="JPushGetJMessageTypeV2";
             public  static String JPushGetJMessageLogIndex="JPushGetJMessageLogIndexV2";
 
@@ -30,6 +31,8 @@ public class API {
             public final static String SIGNIN = "signIn";//用户签到
             public final static String signIn_WiFi = "signIn_WiFi";//用户WIFI签到
             public final static String signOut_WiFi = "signOut_WiFi";//用户WIFI签退
+
+
         }
     }
 }

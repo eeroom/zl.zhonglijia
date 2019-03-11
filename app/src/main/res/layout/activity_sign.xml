@@ -29,16 +29,16 @@
             <LinearLayout
                 android:id="@+id/top_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="160dp"
                 android:background="@mipmap/signbg0"
                 android:gravity="bottom"
-                android:paddingBottom="40dp">
+                android:paddingBottom="20dp">
 
 
                 <LinearLayout
                     android:id="@+id/ll_head"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
                     android:background="@mipmap/signbg4"
                     android:gravity="center">
 
@@ -55,7 +55,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="153dp"
+                    android:layout_height="140dp"
                     android:background="@mipmap/signbg3"
                     android:gravity="center_vertical">
 
@@ -63,10 +63,10 @@
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="40dp"
-                        android:layout_marginTop="30dp"
+
+                        android:layout_marginTop="84dp"
                         android:text="未揭榜"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -76,7 +76,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_name"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -86,7 +86,7 @@
                             android:text="早上："
                             android:textColor="@color/white"
                             android:textSize="13sp"
-                            android:visibility="gone" />
+                            />
 
                         <TextView
                             android:id="@+id/tv_time"

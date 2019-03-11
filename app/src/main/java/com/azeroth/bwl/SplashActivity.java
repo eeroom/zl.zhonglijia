@@ -35,6 +35,7 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
 //        ra.setDuration(1000);
 //        ra.setAnimationListener(this);
 //        layout.setAnimation(ra);
+        this.initData();
     }
 
     @Override
@@ -52,10 +53,7 @@ public class SplashActivity extends BwActivity implements Animation.AnimationLis
     @Override
     public  void onAnimationEnd(Animation animation){
         Intent it=new Intent();
-        SharedPreferences sp= this.getSharedPreferences(SpBucket.Index.Global,Context.MODE_PRIVATE);
-        boolean guided= sp.getBoolean(SpBucket.Item.Guided,false);
-        Class<?> cl=guided?GuidActivity.class:GuidActivity.class;
-        it.setClass(this,cl);
+        it.setClass(this,GuidActivity.class);
         this.startActivity(it);
         this.finish();
     }

@@ -39,10 +39,14 @@ public abstract class BwActivity extends Activity
         super.onCreate(savedInstanceState);
         try {
             this.initView();
-            this.initData();
         }catch (Exception ex){
             String msg=ex.getMessage();
             String msg2=ex.getClass().getName();
+            StackTraceElement[] st=ex.getStackTrace();
+            for (int i=0;i<st.length;i++){
+                Log.e("WP",st[i].toString());
+            }
+
             Toast.makeText(this,msg!=null?msg:msg2,Toast.LENGTH_SHORT).show();
         }
     }
@@ -58,6 +62,10 @@ public abstract class BwActivity extends Activity
           }catch (Exception ex){
               String msg=ex.getMessage();
               String msg2=ex.getClass().getName();
+              StackTraceElement[] st=ex.getStackTrace();
+              for (int i=0;i<st.length;i++){
+                  Log.e("WP",st[i].toString());
+              }
               this.handler.post(()->Toast.makeText(this,msg!=null?msg:msg2,Toast.LENGTH_SHORT).show());
           }
         };
@@ -68,6 +76,10 @@ public abstract class BwActivity extends Activity
             try {
                 fn.Run();
             }catch (Exception ex){
+                StackTraceElement[] st=ex.getStackTrace();
+                for (int i=0;i<st.length;i++){
+                    Log.e("WP",st[i].toString());
+                }
                 String msg=ex.getMessage();
                 String msg2=ex.getClass().getName();
                 this.handler.post(()->Toast.makeText(this,msg!=null?msg:msg2,Toast.LENGTH_SHORT).show());
