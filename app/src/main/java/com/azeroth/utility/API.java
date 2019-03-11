@@ -31,7 +31,7 @@ public class API {
             public final static String SIGNIN = "signIn";//用户签到
             public final static String signIn_WiFi = "signIn_WiFi";//用户WIFI签到
             public final static String signOut_WiFi = "signOut_WiFi";//用户WIFI签退
-
+            public final static String CHECKUSERBYPHONE = "CheckUserByPhone";//根据手机号验证用户是否存在
 
         }
     }

@@ -1,14 +1,9 @@
 package com.azeroth.bwl;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -16,13 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.TypeReference;
-import com.azeroth.model.CompanyDateTripBean;
 import com.azeroth.model.OutWorkBean;
 import com.azeroth.utility.API;
 import com.azeroth.utility.BwLocationListener;
 import com.azeroth.utility.GlideCircleTransform;
 import com.azeroth.utility.SoapRequestMessage;
-import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.bumptech.glide.Glide;
@@ -30,10 +23,8 @@ import com.bumptech.glide.Glide;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class SignActivity extends BwActivity {
@@ -59,7 +50,7 @@ public class SignActivity extends BwActivity {
         //外勤列表
         SoapRequestMessage message=new SoapRequestMessage(API.KQ.BassAdress);
         message.action=API.KQ.Action.GETTODAYOUTSIDEAPPLY;
-        message.parameter.put("UserID",BwApplication.appInstance.userInfo.PhoneNumber);
+        message.parameter.put("UserID",BwApplication.appInstance.userInfo.KqUserId);
         this.SendSoapRequest(message,this::outWorkHandler);
         //最早到的人
         SoapRequestMessage messageFirstArrive=new SoapRequestMessage(API.KQ.BassAdress);
@@ -68,7 +59,7 @@ public class SignActivity extends BwActivity {
         //获取打卡信息
         SoapRequestMessage messageDaka=new SoapRequestMessage(API.KQ.BassAdress);
         messageDaka.action=API.KQ.Action.GETSCHEDULBYUSERID;
-        messageDaka.parameter.put("UserID", BwApplication.appInstance.userInfo.PhoneNumber);
+        messageDaka.parameter.put("UserID", BwApplication.appInstance.userInfo.KqUserId);
         messageDaka.parameter.put("longitude", "111");//这个参数没用了
         messageDaka.parameter.put("latitude", "222");//这个参数没用了
         this.SendSoapRequest(messageDaka,this::dakaHandler);
@@ -127,7 +118,7 @@ public class SignActivity extends BwActivity {
         }
         SoapRequestMessage message=new SoapRequestMessage(API.KQ.BassAdress);
         message.action=API.KQ.Action.signIn_WiFi;
-        message.parameter.put("UserID", BwApplication.appInstance.userInfo.PhoneNumber);
+        message.parameter.put("UserID", BwApplication.appInstance.userInfo.KqUserId);
         message.parameter.put("AttendLocationID", "WIFI打卡");//这个没用
         message.parameter.put("longitude", this.mLongitude);
         message.parameter.put("latitude", this.mLatitude);

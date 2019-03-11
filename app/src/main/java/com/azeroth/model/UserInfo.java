@@ -3,6 +3,7 @@ package com.azeroth.model;
 import com.azeroth.bwl.BwApplication;
 
 public  class UserInfo{
+        public String KqUserId;
         public String PhoneNumber;
         public  String Pwd;
         /// <summary>

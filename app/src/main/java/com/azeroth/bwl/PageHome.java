@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +25,6 @@ import com.bumptech.glide.Glide;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.serialization.SoapObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,6 +86,16 @@ public class PageHome extends Page {
         kechengMessage.action=API.ERP.Action.GETCOMPANYTRIPOFFULLPICTURE;
         kechengMessage.parameter.put("Time",new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         this.hostActivity.SendSoapRequest(kechengMessage,this::handlerKecheng);
+        //更新用户在考勤系统的用户Id
+        SoapRequestMessage kqUserIdMessage=new SoapRequestMessage(API.KQ.BassAdress);
+        kqUserIdMessage.action=API.KQ.Action.CHECKUSERBYPHONE;
+        kqUserIdMessage.parameter.put("Phone",BwApplication.appInstance.userInfo.PhoneNumber);
+        this.hostActivity.SendSoapRequest(kqUserIdMessage,(result,value)->{
+            JSONArray obj_json2 = new JSONArray(value);
+            BwApplication.appInstance.userInfo.KqUserId =obj_json2.getJSONObject(0).getString("content");
+        });
+
+
     }
 
     void  gvMenuOnItemClick(AdapterView<?> parent, View view, int position, long id){
