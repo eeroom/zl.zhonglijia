@@ -11,9 +11,11 @@ Java_com_example_mklzapp_MainActivity_stringFromJNI(
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_azeroth_bwl_PageZLQ_stringFromJNI(JNIEnv *env, jobject instance) {
+    return env->NewStringUTF("Hello from C++222");
+}extern "C"
+JNIEXPORT jint JNICALL
+Java_com_azeroth_bwl_PageZLQ_ageGet(JNIEnv *env, jobject instance) {
 
-    // TODO
+    return 3;
 
-
-    return env->NewStringUTF("Hello from C++");
 }
